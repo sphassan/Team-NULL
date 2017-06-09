@@ -10,38 +10,57 @@
     <LinearLayout
         android:id="@+id/LinearLayout"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="vertical"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-        <Button
-            android:id="@+id/play"
-            android:background="#ffffff"
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="play"
-            android:drawableTop="@drawable/play_button">
-        </Button>
-        <Button
-            android:id="@+id/settings"
-            android:background="#ffffff"
+            android:gravity="center_horizontal"
+            android:drawableTop="@drawable/eye"
+            android:textSize="30sp"
+            android:text="title here"/>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"/>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="settings"
-            android:drawableTop="@drawable/settings_button">
-        </Button>
-        <Button
-            android:id="@+id/quit"
-            android:background="#ffffff"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="quit"
-            android:drawableTop="@drawable/quit_button">
-        </Button>
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/play"
+                android:background="#ffffff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="play"
+                android:drawableTop="@drawable/play_button">
+            </Button>
+            <Button
+                android:id="@+id/settings"
+                android:background="#ffffff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="settings"
+                android:drawableTop="@drawable/settings_button">
+            </Button>
+            <Button
+                android:id="@+id/quit"
+                android:background="#ffffff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="quit"
+                android:drawableTop="@drawable/quit_button">
+            </Button>
+        </LinearLayout>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
