@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity"
-            android:label="Main Menu">
+            android:label="[Unnamed Eye Contact Game]">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
