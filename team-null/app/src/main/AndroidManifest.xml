@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:label="[Unnamed Eye Contact Game]">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,7 +21,8 @@
         <activity android:name=".GameActivity" />
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
+            android:label="@string/title_activity_settings" />
+        <activity android:name=".NewSettingsActivity"></activity>
     </application>
 
 </manifest>
