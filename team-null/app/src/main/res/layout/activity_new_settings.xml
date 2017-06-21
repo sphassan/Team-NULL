@@ -3,7 +3,43 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context="app.anull.net.team_null.NewSettingsActivity">
+
+    <LinearLayout
+        android:layout_height="132dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="15dp"
+        tools:layout_editor_absoluteY="16dp"
+        android:layout_width="wrap_content">
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="368dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Dots"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="16dp" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="368dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Conversatoin Partner"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="64dp" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="368dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Difficulty"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="112dp" />
+
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

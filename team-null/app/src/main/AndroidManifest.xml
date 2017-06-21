@@ -22,7 +22,9 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
-        <activity android:name=".NewSettingsActivity"></activity>
+        <activity
+            android:name=".NewSettingsActivity"
+            android:label="Settings"/>
     </application>
 
 </manifest>
