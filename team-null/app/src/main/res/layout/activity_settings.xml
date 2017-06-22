@@ -6,4 +6,32 @@
     android:layout_height="match_parent"
     tools:context="app.anull.net.team_null.SettingActivity">
 
+    <LinearLayout
+        android:layout_width="366dp"
+        android:layout_height="140dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Dots" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Conversation Partner" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Difficulty" />
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>
