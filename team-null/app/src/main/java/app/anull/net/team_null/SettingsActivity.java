@@ -16,7 +16,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Play");
+        actionBar.setTitle("Settings");
         if (actionBar != null) {
             // Show the Up button in the action bar.
             actionBar.setDisplayHomeAsUpEnabled(true);
