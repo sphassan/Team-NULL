@@ -19,12 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".GameActivity" />
-        <activity
-            android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings" />
-        <activity
-            android:name=".NewSettingsActivity"
-            android:label="Settings"/>
+        <activity android:name=".SettingsActivity"></activity>
     </application>
 
 </manifest>
