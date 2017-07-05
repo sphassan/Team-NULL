@@ -7,8 +7,8 @@
     tools:context="app.anull.net.team_null.NewSettingsActivity">
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="149dp"
+        android:layout_width="343dp"
+        android:layout_height="240dp"
         android:orientation="vertical"
         tools:ignore="MissingConstraints"
         android:layout_marginRight="8dp"
@@ -17,10 +17,10 @@
         android:layout_marginBottom="-16dp"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        tools:layout_editor_absoluteX="13dp">
+        tools:layout_editor_absoluteX="33dp">
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/dots"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -29,7 +29,7 @@
             tools:layout_editor_absoluteY="16dp" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/convo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1.92"
@@ -38,11 +38,20 @@
             tools:layout_editor_absoluteY="64dp" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/diff"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Difficulty"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="112dp" />
+
+        <Button
+            android:id="@+id/reg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Register"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="112dp" />
 
