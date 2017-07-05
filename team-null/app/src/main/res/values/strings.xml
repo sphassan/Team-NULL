@@ -76,6 +76,8 @@
     <string name="title_activity_register">Welcome!</string>
 
     <!-- Strings related to login -->
+    <string name="prompt_first_name">First Name</string>
+    <string name="prompt_last_name">Last Name</string>
     <string name="prompt_email">Email</string>
     <string name="action_sign_in">Register</string>
     <string name="error_invalid_email">This email address is invalid</string>

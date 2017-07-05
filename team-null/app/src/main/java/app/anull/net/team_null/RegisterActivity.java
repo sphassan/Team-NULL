@@ -3,6 +3,9 @@ package app.anull.net.team_null;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,7 +21,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
+import java.net.InetAddress;
 import java.net.URL;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -30,6 +33,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     // UI references.
     private AutoCompleteTextView mEmailView;
+    private AutoCompleteTextView mFirstNameView;
+    private AutoCompleteTextView mLastNameView;
     private View mProgressView;
     private View mLoginFormView;
 
@@ -39,6 +44,8 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mFirstNameView = (AutoCompleteTextView) findViewById(R.id.firstName);
+        mLastNameView = (AutoCompleteTextView) findViewById(R.id.lastName);
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
 
@@ -70,6 +77,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
+        String firstName = mFirstNameView.getText().toString();
+        String lastName = mLastNameView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -94,7 +103,7 @@ public class RegisterActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email);
+            mAuthTask = new UserLoginTask(email, firstName, lastName);
             mAuthTask.execute((Void) null);
         }
     }
@@ -149,22 +158,25 @@ public class RegisterActivity extends AppCompatActivity {
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
-        private String isRegistered = "";
+        private final String mFirstName;
+        private final String mLastName;
+        private String response = "";
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("Unnamed Eye Contact Game", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor;
 
-        UserLoginTask(String email) {
+        UserLoginTask(String email, String firstName, String lastName) {
             mEmail = email;
+            mFirstName = firstName;
+            mLastName = lastName;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
 
             try {
-                URL url = null;
-                try {
-                    url = new URL("184.72.86.223");
-                } catch (MalformedURLException e){
-                    e.printStackTrace();
-                }
+                InetAddress addr = InetAddress.getByName("184.72.86.223");
+                URL url = new URL("http://"+addr.getHostAddress());
+
                 HttpURLConnection client = null;
                 try {
                     client = (HttpURLConnection) url.openConnection();
@@ -178,7 +190,7 @@ public class RegisterActivity extends AppCompatActivity {
                 } catch (JSONException e){
                     e.printStackTrace();
                 }*/
-                String postArray = mEmail;
+                String postArray = mEmail+","+mFirstName+","+mLastName;
 
                 try{
                     client.setRequestMethod("POST");
@@ -186,11 +198,12 @@ public class RegisterActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 try {
-                    client.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                    client.setRequestProperty("Content-Type", "text/plain");
                     client.setRequestProperty("charset", "utf-8");
                     client.setRequestProperty("Content-Length", Integer.toString(postArray.length()));
                     client.setUseCaches(false);
                     client.setDoOutput(true);
+                    client.connect();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -216,8 +229,10 @@ public class RegisterActivity extends AppCompatActivity {
                     // Append server response in string
                     sb.append(line);
                 }
-                isRegistered = sb.toString();
+                response = sb.toString();
+                System.out.println("Response from brandon's server: " + response);
             } catch (Exception e) {
+                e.printStackTrace();
                 return false;
             }
 
@@ -228,10 +243,17 @@ public class RegisterActivity extends AppCompatActivity {
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
-
-            if (success) {
+            //compare response to what you should receive (current string is just testing for the server, as the server response changes so does this conditional) TODO: change it
+            if (response.equals("<html><body><h1>POST!</h1></body></html><p>['"+mEmail+"', '"+mFirstName+"', '"+mLastName+"']<p>")) {
+                editor = pref.edit();
+                editor.putBoolean("LoggedIn", true);
+                editor.commit();
+                Intent mainActivity = new Intent(RegisterActivity.this, MainActivity.class);
+                startActivity(mainActivity);
                 finish();
-            } else {
+            } else {//Will need a new Intent and activity for waiting for confirmation
+                System.out.println("failed");
+                finish();
             }
         }
 
