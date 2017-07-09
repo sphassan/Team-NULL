@@ -15,7 +15,15 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         setupActionBar();
-        
+        Button reg = (Button) findViewById(R.id.reg);
+        reg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SettingsActivity.this, RegisterActivity.class);
+                startActivity(intent);
+                setupActionBar();
+            }
+        });
     }
 
     private void setupActionBar() {

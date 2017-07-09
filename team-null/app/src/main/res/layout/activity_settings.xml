@@ -46,6 +46,15 @@
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="112dp" />
 
+        <Button
+            android:id="@+id/reg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Re-Register"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="16dp" />
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
