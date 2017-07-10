@@ -6,8 +6,8 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -19,23 +19,18 @@
         <activity
             android:name=".MainActivity"
             android:label="[Unnamed Eye Contact Game]">
-
             <intent-filter>
                 <action android:name="android.intent.action.DEFAULT" />
             </intent-filter>
-
         </activity>
         <activity android:name=".GameActivity" />
-
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity
             android:name=".RegisterActivity"
             android:label="@string/title_activity_register"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
-
-        </activity>
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity android:name=".AppEntryPoint">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,7 +38,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".DotsActivity"
+            android:label="@string/title_activity_dots"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

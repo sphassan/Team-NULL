@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -21,7 +24,15 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(SettingsActivity.this, RegisterActivity.class);
                 startActivity(intent);
-                setupActionBar();
+            }
+        });
+
+        Button dots = (Button) findViewById(R.id.dots);
+        dots.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SettingsActivity.this, DotsActivity.class);
+                startActivity(intent);
             }
         });
     }

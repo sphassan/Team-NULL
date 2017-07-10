@@ -82,5 +82,6 @@
     <string name="action_sign_in">Register</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_field_required">This field is required</string>
+    <string name="title_activity_dots">DotsActivity</string>
 
 </resources>
