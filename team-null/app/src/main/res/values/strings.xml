@@ -84,4 +84,5 @@
     <string name="error_field_required">This field is required</string>
     <string name="title_activity_dots">DotsActivity</string>
 
+    <string name="setting_button_convo">Conversation Partner</string>
 </resources>

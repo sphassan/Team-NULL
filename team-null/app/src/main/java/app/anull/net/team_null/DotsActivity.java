@@ -15,6 +15,8 @@ public class DotsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dots);
 
+        setupActionBar();
+
         final TextView textView = (TextView) findViewById(R.id.textView);
         SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar);
         textView.setText( (seekBar.getProgress()+1) + "/" + (seekBar.getMax() + 1));
