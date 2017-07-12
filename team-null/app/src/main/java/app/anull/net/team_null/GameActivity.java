@@ -15,17 +15,23 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Timer;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
 
     private int correctButton;
     private int points;
+    private Timer time;
+    private Interrupt interrupt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         setupActionBar();
+
+        time = new Timer();
+        interrupt = new Interrupt();
 
         points = 0;
 
@@ -36,6 +42,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View view) {
                 start.setVisibility(View.GONE);
+                setGame();
+                Log.d("POST-SET", "begin first run");
                 startGame();
             }
         });
@@ -71,7 +79,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         Log.d("CLICKED", ""+v.getId());
         if (v.getId() == correctButton) {
-            // do things
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Correct!");
             AlertDialog dialog = builder.create();
@@ -82,8 +89,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             v.setVisibility(View.GONE);
     }
 
-    // sets up the game for first run
-    // TODO: programatically unhide the buttons in the layout xml based off of which are needed for a given level
+    // sets up game timer
+    private void setGame() {
+        time.schedule(interrupt, 60 * 1000);
+        Log.d("SET", "game set");
+    }
+
+    // sets a singular game state
+    // TODO: programatically unhide the buttons in the layout xml based off of which are needed for a given level - needs DotsActivity to set Preference
     // TODO: create Timer background thread to run a TimerTask to interrupt after 60 seconds elapsed
     private void startGame() {
         ConstraintLayout layout = (ConstraintLayout) findViewById(R.id.game_layout);
@@ -127,17 +140,27 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         ImageView face = (ImageView) findViewById(R.id.face);
         switch (correctButton) {
             case R.id.point1:
-                face.setImageResource(R.drawable.bottom_left);
+                face.setImageResource(R.drawable.emoji_bottomleft);
                 break;
             case R.id.point2:
-                face.setImageResource(R.drawable.top_left);
+                face.setImageResource(R.drawable.emoji_topleft);
                 break;
             case R.id.point3:
-                face.setImageResource(R.drawable.bottom_right);
+                face.setImageResource(R.drawable.emoji_bottomright);
                 break;
             case R.id.point4:
-                face.setImageResource(R.drawable.top_right);
+                face.setImageResource(R.drawable.emoji_topright);
                 break;
+        }
+
+        while (!interrupt.getDone()) {
+            continue;
+        }
+
+        if (interrupt.getDone()) {
+            interrupt.setDone(false);
+            setGame();
+            startGame();
         }
     }
 
