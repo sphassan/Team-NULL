@@ -1,6 +1,7 @@
 package app.anull.net.team_null;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -23,14 +24,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private int correctButton;
     private int points;
+    private int incorrect;
+    private int dots; // TODO: get this value from settings
+    private TextView score;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         setupActionBar();
-
-        points = 0;
 
         /* create and define start button and click action */
 
@@ -44,6 +46,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 startGame();
             }
         });
+
+
+        ConstraintLayout layout = (ConstraintLayout) findViewById(R.id.game_layout);
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+
+        score = new TextView(this);
+        score.setVisibility(View.INVISIBLE);
+        layout.addView(score, params);
 
         /* set all buttons defined in the xml to be invisible */
 
@@ -76,18 +86,26 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         Log.d("CLICKED", ""+v.getId());
         if (v.getId() == correctButton) {
+            MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.correct);
+            mp.start();
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Correct!");
             AlertDialog dialog = builder.create();
             dialog.show();
+            points += 100 - ((double)incorrect/dots * 100);
             startGame();
         }
-        else
+        else {
+            incorrect++;
             v.setVisibility(View.GONE);
+            MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.wrong);
+            mp.start();
+        }
     }
 
     // sets up game timer
     private void setGame() {
+        points = 0;
         Timer time = new Timer();
         final GameActivity game = this;
         time.schedule(new TimerTask() {
@@ -108,13 +126,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     // sets a singular game state
     // TODO: programatically unhide the buttons in the layout xml based off of which are needed for a given level - needs DotsActivity to set Preference
-    // TODO: create Timer background thread to run a TimerTask to interrupt after 60 seconds elapsed
     private void startGame() {
-        ConstraintLayout layout = (ConstraintLayout) findViewById(R.id.game_layout);
-        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
-
         int x = getResources().getDisplayMetrics().widthPixels;
         //int y = getResources().getDisplayMetrics().heightPixels;
+
+        incorrect = 0;
+        dots = 4; // TODO: don't hardcode this
 
         ArrayList<ImageButton> buttons = new ArrayList<ImageButton>();
 
@@ -138,11 +155,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         point4.setOnClickListener(this);
         buttons.add(point4);
 
-        TextView score = new TextView(this);
+        score.setVisibility(View.VISIBLE);
         score.setText("Score: " + points); // TODO: switch to Android resource strings
         score.setX(x/2 - 80);
         score.setY(200);
-        layout.addView(score, params);
 
         Random r = new Random();
         correctButton = buttons.get(r.nextInt(4)).getId();
