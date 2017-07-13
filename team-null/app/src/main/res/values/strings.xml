@@ -85,4 +85,10 @@
     <string name="title_activity_dots">DotsActivity</string>
 
     <string name="setting_button_convo">Conversation Partner</string>
+    <string name="title_activity_convo">ConvoActivity</string>
+
+    <string-array name="planets_array">
+        <item>Boy</item>
+        <item>Girl</item>
+    </string-array>
 </resources>

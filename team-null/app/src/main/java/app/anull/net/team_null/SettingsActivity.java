@@ -35,6 +35,16 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        Button convo = (Button) findViewById(R.id.convo);
+        convo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SettingsActivity.this, ConvoActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void setupActionBar() {

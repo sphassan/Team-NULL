@@ -40,8 +40,10 @@
         </activity>
         <activity
             android:name=".DotsActivity"
-            android:label="@string/title_activity_dots"
-            />
+            android:label="@string/title_activity_dots" />
+        <activity
+            android:name=".ConvoActivity"
+            android:label="@string/title_activity_convo"></activity>
     </application>
 
 </manifest>
