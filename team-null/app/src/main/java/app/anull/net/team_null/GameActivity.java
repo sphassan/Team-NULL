@@ -164,19 +164,21 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         correctButton = buttons.get(r.nextInt(4)).getId();
         Log.d("CORRECT", ""+correctButton);
 
+        // TODO: programatically set face image, see next TODO
         ImageView face = (ImageView) findViewById(R.id.face);
+        // TODO: determine face type, gender from settings
         switch (correctButton) {
             case R.id.point1:
-                face.setImageResource(R.drawable.emoji_bottomleft);
+                face.setImageResource(R.drawable.emoji_bottomleft_f);
                 break;
             case R.id.point2:
-                face.setImageResource(R.drawable.emoji_topleft);
+                face.setImageResource(R.drawable.emoji_topleft_f);
                 break;
             case R.id.point3:
-                face.setImageResource(R.drawable.emoji_bottomright);
+                face.setImageResource(R.drawable.emoji_bottomright_f);
                 break;
             case R.id.point4:
-                face.setImageResource(R.drawable.emoji_topright);
+                face.setImageResource(R.drawable.emoji_topright_f);
                 break;
         }
     }
