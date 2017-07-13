@@ -45,6 +45,15 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        Button diff = (Button) findViewById(R.id.diff);
+        diff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SettingsActivity.this, DiffActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void setupActionBar() {

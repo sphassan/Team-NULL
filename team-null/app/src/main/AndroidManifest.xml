@@ -43,7 +43,8 @@
             android:label="@string/title_activity_dots" />
         <activity
             android:name=".ConvoActivity"
-            android:label="@string/title_activity_convo"></activity>
+            android:label="@string/title_activity_convo" />
+        <activity android:name=".DiffActivity"></activity>
     </application>
 
 </manifest>

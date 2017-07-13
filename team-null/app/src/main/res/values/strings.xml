@@ -87,8 +87,16 @@
     <string name="setting_button_convo">Conversation Partner</string>
     <string name="title_activity_convo">ConvoActivity</string>
 
-    <string-array name="planets_array">
+    <string-array name="convo_array">
         <item>Boy</item>
         <item>Girl</item>
     </string-array>
+
+    <string-array name="diff_array">
+        <item>1 - Basic 2D Images</item>
+        <item>2 - Basic 3D Images</item>
+        <item>3 - Simple Real Images</item>
+        <item>4 - Complex Real Images</item>
+    </string-array>
+
 </resources>
