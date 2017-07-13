@@ -1,5 +1,6 @@
 package app.anull.net.team_null;
 
+import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -16,22 +17,18 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
 
     private int correctButton;
     private int points;
-    private Timer time;
-    private Interrupt interrupt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         setupActionBar();
-
-        time = new Timer();
-        interrupt = new Interrupt();
 
         points = 0;
 
@@ -91,8 +88,22 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     // sets up game timer
     private void setGame() {
-        time.schedule(interrupt, 60 * 1000);
+        Timer time = new Timer();
+        final GameActivity game = this;
+        time.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                game.endGame();
+            }
+        }, 60 * 1000);
         Log.d("SET", "game set");
+    }
+
+
+    // TODO: transfer to stats activity instead of main menu
+    private void endGame() {
+        Intent intent = new Intent(GameActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 
     // sets a singular game state
@@ -151,16 +162,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.point4:
                 face.setImageResource(R.drawable.emoji_topright);
                 break;
-        }
-
-        while (!interrupt.getDone()) {
-            continue;
-        }
-
-        if (interrupt.getDone()) {
-            interrupt.setDone(false);
-            setGame();
-            startGame();
         }
     }
 
