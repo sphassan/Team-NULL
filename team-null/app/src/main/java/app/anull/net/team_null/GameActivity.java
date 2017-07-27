@@ -119,6 +119,24 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         time.schedule(new TimerTask() {
             @Override
             public void run() {
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor;
+                editor = pref.edit();
+
+                // TODO: pseudorandomly select between increasing number of dots, changing dot type, and changing face
+                int rand = 0;
+                if (rand == 0) {
+                    int temp = pref.getInt("dotNum", 2);
+                    Log.d("GET DOTS", ""+temp);
+                    if (temp + 2 > 8)
+                        temp = 8;
+                    else
+                        temp += 2;
+                    editor.putInt("dotNum", temp);
+                    editor.commit();
+                    Log.d("SET DOTS", ""+temp);
+                }
+
                 game.refresh();
                 game.endGame();
             }
@@ -143,18 +161,25 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         Random r = new Random();
 
         incorrect = 0;
-        dots = pref.getInt("dotnum", 2);
+        dots = pref.getInt("dotNum", 2);
+        Log.d("START DOTS", ""+dots);
+        String shape = pref.getString("dotType", "circle");
 
         ArrayList<ImageButton> buttons = new ArrayList<>();
         ArrayList<Integer> picked = new ArrayList<>();
 
         for (int i = 0; i < dots; i++) {
-            int rand = r.nextInt(8)+1;
-            if (picked.contains(rand)) {
-                i--;
-                continue;
+            int rand;
+            if (dots != 8) {
+                rand = r.nextInt(8) + 1;
+                if (picked.contains(rand)) {
+                    i--;
+                    continue;
+                }
+                picked.add(rand);
             }
-            picked.add(rand);
+            else
+                rand = i+1;
 
             switch (rand) { // TODO: use literally anything besides a switch statement why am I like this
                 case 1:
@@ -271,7 +296,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
 
         if (pref.getInt("oldScore", 0) < points) {
-            //do something
+            // TODO: do something when this happens
         }
 
         SharedPreferences.Editor editor;
