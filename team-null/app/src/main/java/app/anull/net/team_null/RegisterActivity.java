@@ -294,6 +294,10 @@ public class RegisterActivity extends AppCompatActivity {
                 editor = pref.edit();
                 editor.putBoolean("LoggedIn", true);
                 editor.commit();
+                // TODO: remove this block after the if statement above is correct
+                Intent mainActivity = new Intent(RegisterActivity.this, MainActivity.class);
+                startActivity(mainActivity);
+                /* end block */
                 finish();
             }
         }
