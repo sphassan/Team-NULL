@@ -28,7 +28,7 @@ public class AppEntryPoint extends AppCompatActivity {
         editor.commit();
         */
         /* end block */
-
+        
         loggedIn = pref.getBoolean("LoggedIn", false);
 
         if (loggedIn == true) {

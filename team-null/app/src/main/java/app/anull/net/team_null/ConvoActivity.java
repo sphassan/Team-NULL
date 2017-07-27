@@ -7,9 +7,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Spinner;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Toast;
 
 public class ConvoActivity extends AppCompatActivity {
 
@@ -18,30 +17,39 @@ public class ConvoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_convo);
         setupActionBar();
-
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
-// Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.convo_array, android.R.layout.simple_spinner_item);
-// Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Object item = parent.getItemAtPosition(position);
-
+        Button female = (Button) findViewById(R.id.buttonGirl);
+        female.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor;
                 editor = pref.edit();
-                if (item.toString().equals("Girl"))
-                    editor.putBoolean("isFemale", true);
-                else
-                    editor.putBoolean("isFemale", false);
-                editor.commit();
+                editor.putBoolean("isFemale", true);
+                editor.apply();
+                Context context = getApplicationContext();
+                CharSequence text = "Girl Selected!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
             }
-            public void onNothingSelected(AdapterView<?> parent) {
+        });
+
+        Button male = (Button) findViewById(R.id.buttonBoy);
+        male.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor;
+                editor = pref.edit();
+                editor.putBoolean("isFemale", false);
+                editor.apply();
+                Context context = getApplicationContext();
+                CharSequence text = "Boy Selected!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
             }
         });
     }
