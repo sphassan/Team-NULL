@@ -161,7 +161,7 @@ public class RegisterActivity extends AppCompatActivity {
         private final String mFirstName;
         private final String mLastName;
         private String response = "";
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("Unnamed Eye Contact Game", Context.MODE_PRIVATE);
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor;
 
         UserLoginTask(String email, String firstName, String lastName) {

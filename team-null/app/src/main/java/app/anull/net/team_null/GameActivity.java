@@ -1,6 +1,8 @@
 package app.anull.net.team_null;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.ActionBar;
@@ -25,7 +27,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private int correctButton;
     private int points;
     private int incorrect;
-    private int dots; // TODO: get this value from settings
+    private int dots;
     private TextView score;
 
     ImageButton point1; //bottom-left
@@ -117,6 +119,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         time.schedule(new TimerTask() {
             @Override
             public void run() {
+                game.refresh();
                 game.endGame();
             }
         }, 60 * 1000);
@@ -131,17 +134,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     // sets a singular game state
-    // TODO: programatically unhide the buttons in the layout xml based off of which are needed for a given level - needs DotsActivity to set Preference
     private void startGame() {
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", MODE_PRIVATE);
+
         int x = getResources().getDisplayMetrics().widthPixels;
         //int y = getResources().getDisplayMetrics().heightPixels;
 
         Random r = new Random();
 
         incorrect = 0;
-        dots = 4; // TODO: don't hardcode this
+        dots = pref.getInt("dotnum", 2);
 
-        ArrayList<ImageButton> buttons = new ArrayList<ImageButton>();
+        ArrayList<ImageButton> buttons = new ArrayList<>();
         ArrayList<Integer> picked = new ArrayList<>();
 
         for (int i = 0; i < dots; i++) {
@@ -201,15 +205,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         score.setX(x/2 - 80);
         score.setY(200);
 
-        correctButton = buttons.get(r.nextInt(4)).getId();
+        correctButton = buttons.get(r.nextInt(dots)).getId();
         Log.d("CORRECT", ""+correctButton);
+
+        String type = pref.getString("faceType", "2D");
+        boolean female = pref.getBoolean("isFemale", true);
 
         ImageView face = (ImageView) findViewById(R.id.face);
         //if (!female)
         //    face.setImageResource(R.drawable.emoji_resting_m);
-        // TODO: determine face type, gender from settings
-        String type = "2D";
-        boolean female = true;
         switch (correctButton) {
             case R.id.point1:
                 if (type.equals("2D") && female)
@@ -263,10 +267,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /* refresh high score after every 60 second play session */
-    // TODO: use Preferences to log score
     private void refresh() {
-        // check to see if score beats old score, display alert if yes
-        // log score, overwriting prior
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
+
+        if (pref.getInt("oldScore", 0) < points) {
+            //do something
+        }
+
+        SharedPreferences.Editor editor;
+        editor = pref.edit();
+        editor.putInt("oldScore", points);
+        editor.commit();
+
         points = 0;
     }
 
