@@ -10,13 +10,16 @@
 
     <ImageView
         android:id="@+id/face"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="354dp"
+        android:layout_height="278dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintRight_toRightOf="@+id/point8"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/emoji_resting_f" />
+        android:src="@drawable/emoji_resting_f"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/point7"
+        android:layout_marginRight="8dp"
+        app:layout_constraintVertical_bias="0.497" />
 
     <Button
         android:id="@+id/start"

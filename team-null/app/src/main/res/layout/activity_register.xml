@@ -80,6 +80,15 @@
                 android:text="@string/action_sign_in"
                 android:textStyle="bold" />
 
+            <Button
+                android:id="@+id/skip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_weight="3.19"
+                android:text="@string/button_skip"
+                android:textStyle="bold" />
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

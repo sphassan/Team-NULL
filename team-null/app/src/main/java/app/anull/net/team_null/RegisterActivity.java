@@ -49,6 +49,15 @@ public class RegisterActivity extends AppCompatActivity {
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
 
+        Button skip = (Button) findViewById(R.id.skip);
+        skip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {

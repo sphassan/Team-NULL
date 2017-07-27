@@ -87,6 +87,8 @@
     <string name="setting_button_convo">Conversation Partner</string>
     <string name="title_activity_convo">ConvoActivity</string>
 
+    <string name="button_skip">Skip</string>
+
     <string-array name="convo_array">
         <item>Boy</item>
         <item>Girl</item>
