@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AutoCompleteTextView;
@@ -198,6 +199,7 @@ public class RegisterActivity extends AppCompatActivity {
         private final String mFirstName;
         private final String mLastName;
         private String response = "";
+        private int responseCode;
         SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor;
 
@@ -259,6 +261,7 @@ public class RegisterActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
+                responseCode = client.getResponseCode();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
                 StringBuilder sb = new StringBuilder();
                 String line = "";
@@ -281,7 +284,7 @@ public class RegisterActivity extends AppCompatActivity {
             mAuthTask = null;
             showProgress(false);
             //compare response to what you should receive (current string is just testing for the server, as the server response changes so does this conditional) TODO: change it
-            if (response.equals("<html><body><h1>POST!</h1></body></html><p>['"+mEmail+"', '"+mFirstName+"', '"+mLastName+"']<p>")) {
+            if (responseCode == 200) {
                 editor = pref.edit();
                 editor.putBoolean("LoggedIn", true);
                 editor.commit();
@@ -289,15 +292,11 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivity(mainActivity);
                 finish();
             } else {//Will need a new Intent and activity for waiting for confirmation
-                System.out.println("failed");
+                Log.d("STATUS", "login failed");
                 //TODO remove this test (problem was the prefrences for the app getting changed were still under the old name. now that its all refactored all is well)
                 editor = pref.edit();
-                editor.putBoolean("LoggedIn", true);
+                editor.putBoolean("LoggedIn", false);
                 editor.commit();
-                // TODO: remove this block after the if statement above is correct
-                Intent mainActivity = new Intent(RegisterActivity.this, MainActivity.class);
-                startActivity(mainActivity);
-                /* end block */
                 finish();
             }
         }
