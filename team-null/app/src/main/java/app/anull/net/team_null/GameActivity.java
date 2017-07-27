@@ -1,6 +1,8 @@
 package app.anull.net.team_null;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.ActionBar;
@@ -25,8 +27,17 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private int correctButton;
     private int points;
     private int incorrect;
-    private int dots; // TODO: get this value from settings
+    private int dots;
     private TextView score;
+
+    ImageButton point1; //bottom-left
+    ImageButton point2; //top-left
+    ImageButton point3; //bottom-right
+    ImageButton point4; //top-right
+    ImageButton point5; //center-top
+    ImageButton point6; //center-bottom
+    ImageButton point7; //center-left
+    ImageButton point8; //center-right
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,30 +66,26 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         score.setVisibility(View.INVISIBLE);
         layout.addView(score, params);
 
+        /* Initialize all buttons */
+
+        point1 = (ImageButton) findViewById(R.id.point1); //bottom-left
+        point2 = (ImageButton) findViewById(R.id.point2); //top-left
+        point3 = (ImageButton) findViewById(R.id.point3); //bottom-right
+        point4 = (ImageButton) findViewById(R.id.point4); //top-right
+        point5 = (ImageButton) findViewById(R.id.point5); //center-top
+        point6 = (ImageButton) findViewById(R.id.point6); //center-bottom
+        point7 = (ImageButton) findViewById(R.id.point7); //center-left
+        point8 = (ImageButton) findViewById(R.id.point8); //center-right
+
         /* set all buttons defined in the xml to be invisible */
 
-        ImageButton point1 = (ImageButton) findViewById(R.id.point1); //bottom-left
         point1.setVisibility(View.INVISIBLE);
-
-        ImageButton point2 = (ImageButton) findViewById(R.id.point2); //top-left
         point2.setVisibility(View.INVISIBLE);
-
-        ImageButton point3 = (ImageButton) findViewById(R.id.point3); //bottom-right
         point3.setVisibility(View.INVISIBLE);
-
-        ImageButton point4 = (ImageButton) findViewById(R.id.point4); //top-right
         point4.setVisibility(View.INVISIBLE);
-
-        ImageButton point5 = (ImageButton) findViewById(R.id.point5); //center-top
         point5.setVisibility(View.INVISIBLE);
-
-        ImageButton point6 = (ImageButton) findViewById(R.id.point6); //center-bottom
         point6.setVisibility(View.INVISIBLE);
-
-        ImageButton point7 = (ImageButton) findViewById(R.id.point7); //center-left
         point7.setVisibility(View.INVISIBLE);
-
-        ImageButton point8 = (ImageButton) findViewById(R.id.point8); //center-right
         point8.setVisibility(View.INVISIBLE);
     }
 
@@ -93,6 +100,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             AlertDialog dialog = builder.create();
             dialog.show();
             points += 100 - ((double)incorrect/dots * 100);
+            hideButtons();
             startGame();
         }
         else {
@@ -111,6 +119,52 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         time.schedule(new TimerTask() {
             @Override
             public void run() {
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor;
+                editor = pref.edit();
+
+                // TODO: pseudorandomly select between increasing number of dots, changing dot type, and changing face
+                Random r = new Random();
+                int rand = r.nextInt(2);
+                if (rand == 0) {
+                    int temp = pref.getInt("dotNum", 2);
+                    Log.d("GET DOTS", ""+temp);
+                    if (temp + 2 > 8)
+                        temp = 8;
+                    else
+                        temp += 2;
+                    editor.putInt("dotNum", temp);
+                    editor.commit();
+                    Log.d("SET DOTS", ""+temp);
+                }
+                else if (rand == 1) {
+                    rand = r.nextInt(6);
+                    String shape = "dot";
+                    switch (rand) {
+                        case 0:
+                            shape = "circle";
+                            break;
+                        case 1:
+                            shape = "diamond";
+                            break;
+                        case 2:
+                            shape = "heart";
+                            break;
+                        case 3:
+                            shape = "square";
+                            break;
+                        case 4:
+                            shape = "star";
+                            break;
+                        case 5:
+                            shape = "triangle";
+                            break;
+                    }
+                    editor.putString("dotType", shape);
+                    editor.commit();
+                }
+
+                game.refresh();
                 game.endGame();
             }
         }, 60 * 1000);
@@ -125,70 +179,203 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     // sets a singular game state
-    // TODO: programatically unhide the buttons in the layout xml based off of which are needed for a given level - needs DotsActivity to set Preference
     private void startGame() {
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", MODE_PRIVATE);
+
         int x = getResources().getDisplayMetrics().widthPixels;
         //int y = getResources().getDisplayMetrics().heightPixels;
 
+        Random r = new Random();
+
         incorrect = 0;
-        dots = 4; // TODO: don't hardcode this
+        dots = pref.getInt("dotNum", 2);
+        Log.d("START DOTS", ""+dots);
+        String shape = pref.getString("dotType", "circle");
+        int dotResId;
 
-        ArrayList<ImageButton> buttons = new ArrayList<ImageButton>();
+        switch (shape) {
+            case "circle":
+                dotResId = R.drawable.dot_circle;
+                break;
+            case "diamond":
+                dotResId = R.drawable.dot_diamond;
+                break;
+            case "heart":
+                dotResId = R.drawable.dot_heart;
+                break;
+            case "square":
+                dotResId = R.drawable.dot_square;
+                break;
+            case "star":
+                dotResId = R.drawable.dot_star;
+                break;
+            case "triangle":
+                dotResId = R.drawable.dot_triangle;
+                break;
+            default:
+                dotResId = R.drawable.dot;
+        }
 
-        final ImageButton point1 = (ImageButton) findViewById(R.id.point1);
-        point1.setVisibility(View.VISIBLE);
-        point1.setOnClickListener(this);
-        buttons.add(point1);
+        ArrayList<ImageButton> buttons = new ArrayList<>();
+        ArrayList<Integer> picked = new ArrayList<>();
 
-        final ImageButton point2 = (ImageButton) findViewById(R.id.point2);
-        point2.setVisibility(View.VISIBLE);
-        point2.setOnClickListener(this);
-        buttons.add(point2);
+        for (int i = 0; i < dots; i++) {
+            int rand;
+            if (dots != 8) {
+                rand = r.nextInt(8) + 1;
+                if (picked.contains(rand)) {
+                    i--;
+                    continue;
+                }
+                picked.add(rand);
+            }
+            else
+                rand = i+1;
 
-        final ImageButton point3 = (ImageButton) findViewById(R.id.point3);
-        point3.setVisibility(View.VISIBLE);
-        point3.setOnClickListener(this);
-        buttons.add(point3);
-
-        final ImageButton point4 = (ImageButton) findViewById(R.id.point4);
-        point4.setVisibility(View.VISIBLE);
-        point4.setOnClickListener(this);
-        buttons.add(point4);
+            switch (rand) { // TODO: use literally anything besides a switch statement why am I like this
+                case 1:
+                    point1.setImageResource(dotResId);
+                    point1.setVisibility(View.VISIBLE);
+                    point1.setOnClickListener(this);
+                    buttons.add(point1);
+                    break;
+                case 2:
+                    point2.setImageResource(dotResId);
+                    point2.setVisibility(View.VISIBLE);
+                    point2.setOnClickListener(this);
+                    buttons.add(point2);
+                    break;
+                case 3:
+                    point3.setImageResource(dotResId);
+                    point3.setVisibility(View.VISIBLE);
+                    point3.setOnClickListener(this);
+                    buttons.add(point3);
+                    break;
+                case 4:
+                    point4.setImageResource(dotResId);
+                    point4.setVisibility(View.VISIBLE);
+                    point4.setOnClickListener(this);
+                    buttons.add(point4);
+                    break;
+                case 5:
+                    point5.setImageResource(dotResId);
+                    point5.setVisibility(View.VISIBLE);
+                    point5.setOnClickListener(this);
+                    buttons.add(point5);
+                    break;
+                case 6:
+                    point6.setImageResource(dotResId);
+                    point6.setVisibility(View.VISIBLE);
+                    point6.setOnClickListener(this);
+                    buttons.add(point6);
+                    break;
+                case 7:
+                    point7.setImageResource(dotResId);
+                    point7.setVisibility(View.VISIBLE);
+                    point7.setOnClickListener(this);
+                    buttons.add(point7);
+                    break;
+                case 8:
+                    point8.setImageResource(dotResId);
+                    point8.setVisibility(View.VISIBLE);
+                    point8.setOnClickListener(this);
+                    buttons.add(point8);
+                    break;
+            }
+        }
 
         score.setVisibility(View.VISIBLE);
         score.setText("Score: " + points); // TODO: switch to Android resource strings
         score.setX(x/2 - 80);
         score.setY(200);
 
-        Random r = new Random();
-        correctButton = buttons.get(r.nextInt(4)).getId();
+        correctButton = buttons.get(r.nextInt(dots)).getId();
         Log.d("CORRECT", ""+correctButton);
 
-        // TODO: programatically set face image, see next TODO
+        String type = pref.getString("faceType", "2D");
+        boolean female = pref.getBoolean("isFemale", true);
+
         ImageView face = (ImageView) findViewById(R.id.face);
-        // TODO: determine face type, gender from settings
+        //if (!female)
+        //    face.setImageResource(R.drawable.emoji_resting_m);
         switch (correctButton) {
             case R.id.point1:
-                face.setImageResource(R.drawable.emoji_bottomleft_f);
+                if (type.equals("2D") && female)
+                    face.setImageResource(R.drawable.emoji_bottomleft_f);
+                //else if (type.equals("2D"))
+                //    face.setImageResource(R.drawable.emoji_bottomleft_m);
                 break;
             case R.id.point2:
-                face.setImageResource(R.drawable.emoji_topleft_f);
+                if (type.equals("2D") && female)
+                    face.setImageResource(R.drawable.emoji_topleft_f);
+                //else if (type.equals("2D"))
+                //    face.setImageResource(R.drawable.emoji_topleft_m);
                 break;
             case R.id.point3:
-                face.setImageResource(R.drawable.emoji_bottomright_f);
+                if (type.equals("2D") && female)
+                    face.setImageResource(R.drawable.emoji_bottomright_f);
+                //else if (type.equals("2D"))
+                //    face.setImageResource(R.drawable.emoji_bottomright_m);
                 break;
             case R.id.point4:
-                face.setImageResource(R.drawable.emoji_topright_f);
+                if (type.equals("2D") && female)
+                    face.setImageResource(R.drawable.emoji_topright_f);
+                //else if (type.equals("2D"))
+                //  face.setImageResource(R.drawable.emoji_up_m);
+                break;
+            case R.id.point5:
+                if (type.equals("2D") && female)
+                    face.setImageResource(R.drawable.emoji_up_f);
+                //else if (type.equals("2D"))
+                //  face.setImageResource(R.drawable.emoji_up_m);
+                break;
+            case R.id.point6:
+                if (type.equals("2D") && female)
+                    face.setImageResource(R.drawable.emoji_down_f);
+                //else if (type.equals("2D"))
+                //  face.setImageResource(R.drawable.emoji_down_m);
+                break;
+            case R.id.point7:
+                if (type.equals("2D") && female)
+                    face.setImageResource(R.drawable.emoji_left_f);
+                //else if (type.equals("2D"))
+                //  face.setImageResource(R.drawable.emoji_left_m);
+                break;
+            case R.id.point8:
+                if (type.equals("2D") && female)
+                    face.setImageResource(R.drawable.emoji_right_f);
+                //else if (type.equals("2D"))
+                //  face.setImageResource(R.drawable.emoji_right_m);
                 break;
         }
     }
 
     /* refresh high score after every 60 second play session */
-    // TODO: use Preferences to log score
     private void refresh() {
-        // check to see if score beats old score, display alert if yes
-        // log score, overwriting prior
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
+
+        if (pref.getInt("oldScore", 0) < points) {
+            // TODO: do something when this happens
+        }
+
+        SharedPreferences.Editor editor;
+        editor = pref.edit();
+        editor.putInt("oldScore", points);
+        editor.commit();
+
         points = 0;
+    }
+
+    /* hides all buttons that may have been active in last round */
+    private void hideButtons() {
+        point1.setVisibility(View.INVISIBLE);
+        point2.setVisibility(View.INVISIBLE);
+        point3.setVisibility(View.INVISIBLE);
+        point4.setVisibility(View.INVISIBLE);
+        point5.setVisibility(View.INVISIBLE);
+        point6.setVisibility(View.INVISIBLE);
+        point7.setVisibility(View.INVISIBLE);
+        point8.setVisibility(View.INVISIBLE);
     }
 
     private void setupActionBar() {

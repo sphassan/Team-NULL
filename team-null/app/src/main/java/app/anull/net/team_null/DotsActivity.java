@@ -1,5 +1,7 @@
 package app.anull.net.team_null;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +19,7 @@ public class DotsActivity extends AppCompatActivity {
 
         setupActionBar();
 
+
         final TextView textView = (TextView) findViewById(R.id.textView);
         SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar);
         textView.setText( (seekBar.getProgress()+1) + "/" + (seekBar.getMax() + 1));
@@ -26,6 +29,12 @@ public class DotsActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
                 progress = progresValue;
+
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor;
+                editor = pref.edit();
+                editor.putInt("dotNum", progress+1);
+                editor.apply();
 
                 textView.setText((progress+1) + "/" + (seekBar.getMax()+ 1));
 
