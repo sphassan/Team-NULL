@@ -123,7 +123,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 SharedPreferences.Editor editor;
                 editor = pref.edit();
 
-                // TODO: pseudorandomly select between increasing number of dots, changing dot type, and changing face
+                // TODO: add changing face as a pseudorandom change
                 Random r = new Random();
                 int rand = r.nextInt(2);
                 if (rand == 0) {
@@ -178,6 +178,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(intent);
     }
 
+    // TODO: gather statistics from in game
+    // TODO: finalize 3D assets, real pictures and implement
+    // TODO: make dots have transparent instead of white background
+    // TODO: resize face to not touch sides of screen
+    // TODO: implement pre-generated and aesthetic point patterns instead of randomized
     // sets a singular game state
     private void startGame() {
         SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", MODE_PRIVATE);
@@ -296,56 +301,56 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         boolean female = pref.getBoolean("isFemale", true);
 
         ImageView face = (ImageView) findViewById(R.id.face);
-        //if (!female)
-        //    face.setImageResource(R.drawable.emoji_resting_m);
+        if (!female)
+            face.setImageResource(R.drawable.emoji_resting_m);
         switch (correctButton) {
             case R.id.point1:
                 if (type.equals("2D") && female)
                     face.setImageResource(R.drawable.emoji_bottomleft_f);
-                //else if (type.equals("2D"))
-                //    face.setImageResource(R.drawable.emoji_bottomleft_m);
+                else if (type.equals("2D"))
+                    face.setImageResource(R.drawable.emoji_bottomleft_m);
                 break;
             case R.id.point2:
                 if (type.equals("2D") && female)
                     face.setImageResource(R.drawable.emoji_topleft_f);
-                //else if (type.equals("2D"))
-                //    face.setImageResource(R.drawable.emoji_topleft_m);
+                else if (type.equals("2D"))
+                    face.setImageResource(R.drawable.emoji_topleft_m);
                 break;
             case R.id.point3:
                 if (type.equals("2D") && female)
                     face.setImageResource(R.drawable.emoji_bottomright_f);
-                //else if (type.equals("2D"))
-                //    face.setImageResource(R.drawable.emoji_bottomright_m);
+                else if (type.equals("2D"))
+                    face.setImageResource(R.drawable.emoji_bottomright_m);
                 break;
             case R.id.point4:
                 if (type.equals("2D") && female)
                     face.setImageResource(R.drawable.emoji_topright_f);
-                //else if (type.equals("2D"))
-                //  face.setImageResource(R.drawable.emoji_up_m);
+                else if (type.equals("2D"))
+                  face.setImageResource(R.drawable.emoji_up_m);
                 break;
             case R.id.point5:
                 if (type.equals("2D") && female)
                     face.setImageResource(R.drawable.emoji_up_f);
-                //else if (type.equals("2D"))
-                //  face.setImageResource(R.drawable.emoji_up_m);
+                else if (type.equals("2D"))
+                  face.setImageResource(R.drawable.emoji_up_m);
                 break;
             case R.id.point6:
                 if (type.equals("2D") && female)
                     face.setImageResource(R.drawable.emoji_down_f);
-                //else if (type.equals("2D"))
-                //  face.setImageResource(R.drawable.emoji_down_m);
+                else if (type.equals("2D"))
+                  face.setImageResource(R.drawable.emoji_down_m);
                 break;
             case R.id.point7:
                 if (type.equals("2D") && female)
                     face.setImageResource(R.drawable.emoji_left_f);
-                //else if (type.equals("2D"))
-                //  face.setImageResource(R.drawable.emoji_left_m);
+                else if (type.equals("2D"))
+                  face.setImageResource(R.drawable.emoji_left_m);
                 break;
             case R.id.point8:
                 if (type.equals("2D") && female)
                     face.setImageResource(R.drawable.emoji_right_f);
-                //else if (type.equals("2D"))
-                //  face.setImageResource(R.drawable.emoji_right_m);
+                else if (type.equals("2D"))
+                  face.setImageResource(R.drawable.emoji_right_m);
                 break;
         }
     }
