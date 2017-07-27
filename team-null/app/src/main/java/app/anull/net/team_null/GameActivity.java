@@ -87,6 +87,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         point6.setVisibility(View.INVISIBLE);
         point7.setVisibility(View.INVISIBLE);
         point8.setVisibility(View.INVISIBLE);
+
+        /* set resting face */
+
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
+        boolean female = pref.getBoolean("isFemale", true);
+        String type = pref.getString("faceType", "2D");
+        ImageView face = (ImageView) findViewById(R.id.face);
+
+        if (!female && type.equals("2D"))
+            face.setImageResource(R.drawable.emoji_resting_m);
+        //else if (female && type.equals("3D"))
+        //else if (type.equals("3D"))
     }
 
     // handles all dot clicks
@@ -301,8 +313,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         boolean female = pref.getBoolean("isFemale", true);
 
         ImageView face = (ImageView) findViewById(R.id.face);
-        if (!female)
-            face.setImageResource(R.drawable.emoji_resting_m);
         switch (correctButton) {
             case R.id.point1:
                 if (type.equals("2D") && female)
