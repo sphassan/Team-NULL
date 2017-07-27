@@ -124,7 +124,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 editor = pref.edit();
 
                 // TODO: pseudorandomly select between increasing number of dots, changing dot type, and changing face
-                int rand = 0;
+                Random r = new Random();
+                int rand = r.nextInt(2);
                 if (rand == 0) {
                     int temp = pref.getInt("dotNum", 2);
                     Log.d("GET DOTS", ""+temp);
@@ -135,6 +136,32 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     editor.putInt("dotNum", temp);
                     editor.commit();
                     Log.d("SET DOTS", ""+temp);
+                }
+                else if (rand == 1) {
+                    rand = r.nextInt(6);
+                    String shape = "dot";
+                    switch (rand) {
+                        case 0:
+                            shape = "circle";
+                            break;
+                        case 1:
+                            shape = "diamond";
+                            break;
+                        case 2:
+                            shape = "heart";
+                            break;
+                        case 3:
+                            shape = "square";
+                            break;
+                        case 4:
+                            shape = "star";
+                            break;
+                        case 5:
+                            shape = "triangle";
+                            break;
+                    }
+                    editor.putString("dotType", shape);
+                    editor.commit();
                 }
 
                 game.refresh();
@@ -164,6 +191,30 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         dots = pref.getInt("dotNum", 2);
         Log.d("START DOTS", ""+dots);
         String shape = pref.getString("dotType", "circle");
+        int dotResId;
+
+        switch (shape) {
+            case "circle":
+                dotResId = R.drawable.dot_circle;
+                break;
+            case "diamond":
+                dotResId = R.drawable.dot_diamond;
+                break;
+            case "heart":
+                dotResId = R.drawable.dot_heart;
+                break;
+            case "square":
+                dotResId = R.drawable.dot_square;
+                break;
+            case "star":
+                dotResId = R.drawable.dot_star;
+                break;
+            case "triangle":
+                dotResId = R.drawable.dot_triangle;
+                break;
+            default:
+                dotResId = R.drawable.dot;
+        }
 
         ArrayList<ImageButton> buttons = new ArrayList<>();
         ArrayList<Integer> picked = new ArrayList<>();
@@ -183,41 +234,49 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
             switch (rand) { // TODO: use literally anything besides a switch statement why am I like this
                 case 1:
+                    point1.setImageResource(dotResId);
                     point1.setVisibility(View.VISIBLE);
                     point1.setOnClickListener(this);
                     buttons.add(point1);
                     break;
                 case 2:
+                    point2.setImageResource(dotResId);
                     point2.setVisibility(View.VISIBLE);
                     point2.setOnClickListener(this);
                     buttons.add(point2);
                     break;
                 case 3:
+                    point3.setImageResource(dotResId);
                     point3.setVisibility(View.VISIBLE);
                     point3.setOnClickListener(this);
                     buttons.add(point3);
                     break;
                 case 4:
+                    point4.setImageResource(dotResId);
                     point4.setVisibility(View.VISIBLE);
                     point4.setOnClickListener(this);
                     buttons.add(point4);
                     break;
                 case 5:
+                    point5.setImageResource(dotResId);
                     point5.setVisibility(View.VISIBLE);
                     point5.setOnClickListener(this);
                     buttons.add(point5);
                     break;
                 case 6:
+                    point6.setImageResource(dotResId);
                     point6.setVisibility(View.VISIBLE);
                     point6.setOnClickListener(this);
                     buttons.add(point6);
                     break;
                 case 7:
+                    point7.setImageResource(dotResId);
                     point7.setVisibility(View.VISIBLE);
                     point7.setOnClickListener(this);
                     buttons.add(point7);
                     break;
                 case 8:
+                    point8.setImageResource(dotResId);
                     point8.setVisibility(View.VISIBLE);
                     point8.setOnClickListener(this);
                     buttons.add(point8);
