@@ -84,7 +84,28 @@ public class RegisterActivity extends AppCompatActivity {
         View focusView = null;
 
 
-        // Check for a valid email address.
+        // Check for a valid first name, last name, email.
+
+        if(TextUtils.isEmpty(firstName)) {
+            mFirstNameView.setError(getString(R.string.error_field_required));
+            focusView = mFirstNameView;
+            cancel = true;
+        } else if (!isFirstNameValid(firstName)) {
+            mFirstNameView.setError(getString(R.string.error_invalid_name));
+            focusView = mFirstNameView;
+            cancel = true;
+        }
+
+        if(TextUtils.isEmpty(lastName)) {
+            mLastNameView.setError(getString(R.string.error_field_required));
+            focusView = mLastNameView;
+            cancel = true;
+        } else if (!isLastNameValid(lastName)) {
+            mLastNameView.setError(getString(R.string.error_invalid_name));
+            focusView = mLastNameView;
+            cancel = true;
+        }
+
         if (TextUtils.isEmpty(email)) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
@@ -108,8 +129,15 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    private boolean isFirstNameValid(String firstName) {
+        return firstName.matches("^[a-zA-Z]+$");
+    }
+
+    private boolean isLastNameValid(String lastName) {
+        return lastName.matches("^[a-zA-Z]+$");
+    }
+
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
         return email.contains("@");
     }
 
@@ -161,7 +189,7 @@ public class RegisterActivity extends AppCompatActivity {
         private final String mFirstName;
         private final String mLastName;
         private String response = "";
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("Unnamed Eye Contact Game", Context.MODE_PRIVATE);
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor;
 
         UserLoginTask(String email, String firstName, String lastName) {
@@ -253,6 +281,10 @@ public class RegisterActivity extends AppCompatActivity {
                 finish();
             } else {//Will need a new Intent and activity for waiting for confirmation
                 System.out.println("failed");
+                //TODO remove this test (problem was the prefrences for the app getting changed were still under the old name. now that its all refactored all is well)
+                editor = pref.edit();
+                editor.putBoolean("LoggedIn", true);
+                editor.commit();
                 finish();
             }
         }

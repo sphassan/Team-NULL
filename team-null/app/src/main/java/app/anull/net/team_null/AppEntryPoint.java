@@ -18,7 +18,7 @@ public class AppEntryPoint extends AppCompatActivity {
         Boolean loggedIn;
         Intent redirect;
 
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("Unnamed Eye Contact Game", MODE_PRIVATE);
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", MODE_PRIVATE);
         loggedIn = pref.getBoolean("LoggedIn", false);
 
         if (loggedIn == true) {
