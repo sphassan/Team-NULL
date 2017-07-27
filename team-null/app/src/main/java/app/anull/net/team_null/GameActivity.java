@@ -28,6 +28,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private int dots; // TODO: get this value from settings
     private TextView score;
 
+    ImageButton point1; //bottom-left
+    ImageButton point2; //top-left
+    ImageButton point3; //bottom-right
+    ImageButton point4; //top-right
+    ImageButton point5; //center-top
+    ImageButton point6; //center-bottom
+    ImageButton point7; //center-left
+    ImageButton point8; //center-right
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,30 +64,26 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         score.setVisibility(View.INVISIBLE);
         layout.addView(score, params);
 
+        /* Initialize all buttons */
+
+        point1 = (ImageButton) findViewById(R.id.point1); //bottom-left
+        point2 = (ImageButton) findViewById(R.id.point2); //top-left
+        point3 = (ImageButton) findViewById(R.id.point3); //bottom-right
+        point4 = (ImageButton) findViewById(R.id.point4); //top-right
+        point5 = (ImageButton) findViewById(R.id.point5); //center-top
+        point6 = (ImageButton) findViewById(R.id.point6); //center-bottom
+        point7 = (ImageButton) findViewById(R.id.point7); //center-left
+        point8 = (ImageButton) findViewById(R.id.point8); //center-right
+
         /* set all buttons defined in the xml to be invisible */
 
-        ImageButton point1 = (ImageButton) findViewById(R.id.point1); //bottom-left
         point1.setVisibility(View.INVISIBLE);
-
-        ImageButton point2 = (ImageButton) findViewById(R.id.point2); //top-left
         point2.setVisibility(View.INVISIBLE);
-
-        ImageButton point3 = (ImageButton) findViewById(R.id.point3); //bottom-right
         point3.setVisibility(View.INVISIBLE);
-
-        ImageButton point4 = (ImageButton) findViewById(R.id.point4); //top-right
         point4.setVisibility(View.INVISIBLE);
-
-        ImageButton point5 = (ImageButton) findViewById(R.id.point5); //center-top
         point5.setVisibility(View.INVISIBLE);
-
-        ImageButton point6 = (ImageButton) findViewById(R.id.point6); //center-bottom
         point6.setVisibility(View.INVISIBLE);
-
-        ImageButton point7 = (ImageButton) findViewById(R.id.point7); //center-left
         point7.setVisibility(View.INVISIBLE);
-
-        ImageButton point8 = (ImageButton) findViewById(R.id.point8); //center-right
         point8.setVisibility(View.INVISIBLE);
     }
 
@@ -93,6 +98,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             AlertDialog dialog = builder.create();
             dialog.show();
             points += 100 - ((double)incorrect/dots * 100);
+            hideButtons();
             startGame();
         }
         else {
@@ -130,55 +136,128 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         int x = getResources().getDisplayMetrics().widthPixels;
         //int y = getResources().getDisplayMetrics().heightPixels;
 
+        Random r = new Random();
+
         incorrect = 0;
         dots = 4; // TODO: don't hardcode this
 
         ArrayList<ImageButton> buttons = new ArrayList<ImageButton>();
+        ArrayList<Integer> picked = new ArrayList<>();
 
-        final ImageButton point1 = (ImageButton) findViewById(R.id.point1);
-        point1.setVisibility(View.VISIBLE);
-        point1.setOnClickListener(this);
-        buttons.add(point1);
+        for (int i = 0; i < dots; i++) {
+            int rand = r.nextInt(8)+1;
+            if (picked.contains(rand)) {
+                i--;
+                continue;
+            }
+            picked.add(rand);
 
-        final ImageButton point2 = (ImageButton) findViewById(R.id.point2);
-        point2.setVisibility(View.VISIBLE);
-        point2.setOnClickListener(this);
-        buttons.add(point2);
-
-        final ImageButton point3 = (ImageButton) findViewById(R.id.point3);
-        point3.setVisibility(View.VISIBLE);
-        point3.setOnClickListener(this);
-        buttons.add(point3);
-
-        final ImageButton point4 = (ImageButton) findViewById(R.id.point4);
-        point4.setVisibility(View.VISIBLE);
-        point4.setOnClickListener(this);
-        buttons.add(point4);
+            switch (rand) { // TODO: use literally anything besides a switch statement why am I like this
+                case 1:
+                    point1.setVisibility(View.VISIBLE);
+                    point1.setOnClickListener(this);
+                    buttons.add(point1);
+                    break;
+                case 2:
+                    point2.setVisibility(View.VISIBLE);
+                    point2.setOnClickListener(this);
+                    buttons.add(point2);
+                    break;
+                case 3:
+                    point3.setVisibility(View.VISIBLE);
+                    point3.setOnClickListener(this);
+                    buttons.add(point3);
+                    break;
+                case 4:
+                    point4.setVisibility(View.VISIBLE);
+                    point4.setOnClickListener(this);
+                    buttons.add(point4);
+                    break;
+                case 5:
+                    point5.setVisibility(View.VISIBLE);
+                    point5.setOnClickListener(this);
+                    buttons.add(point5);
+                    break;
+                case 6:
+                    point6.setVisibility(View.VISIBLE);
+                    point6.setOnClickListener(this);
+                    buttons.add(point6);
+                    break;
+                case 7:
+                    point7.setVisibility(View.VISIBLE);
+                    point7.setOnClickListener(this);
+                    buttons.add(point7);
+                    break;
+                case 8:
+                    point8.setVisibility(View.VISIBLE);
+                    point8.setOnClickListener(this);
+                    buttons.add(point8);
+                    break;
+            }
+        }
 
         score.setVisibility(View.VISIBLE);
         score.setText("Score: " + points); // TODO: switch to Android resource strings
         score.setX(x/2 - 80);
         score.setY(200);
 
-        Random r = new Random();
         correctButton = buttons.get(r.nextInt(4)).getId();
         Log.d("CORRECT", ""+correctButton);
 
-        // TODO: programatically set face image, see next TODO
         ImageView face = (ImageView) findViewById(R.id.face);
+        //if (!female)
+        //    face.setImageResource(R.drawable.emoji_resting_m);
         // TODO: determine face type, gender from settings
+        String type = "2D";
+        boolean female = true;
         switch (correctButton) {
             case R.id.point1:
-                face.setImageResource(R.drawable.emoji_bottomleft_f);
+                if (type.equals("2D") && female)
+                    face.setImageResource(R.drawable.emoji_bottomleft_f);
+                //else if (type.equals("2D"))
+                //    face.setImageResource(R.drawable.emoji_bottomleft_m);
                 break;
             case R.id.point2:
-                face.setImageResource(R.drawable.emoji_topleft_f);
+                if (type.equals("2D") && female)
+                    face.setImageResource(R.drawable.emoji_topleft_f);
+                //else if (type.equals("2D"))
+                //    face.setImageResource(R.drawable.emoji_topleft_m);
                 break;
             case R.id.point3:
-                face.setImageResource(R.drawable.emoji_bottomright_f);
+                if (type.equals("2D") && female)
+                    face.setImageResource(R.drawable.emoji_bottomright_f);
+                //else if (type.equals("2D"))
+                //    face.setImageResource(R.drawable.emoji_bottomright_m);
                 break;
             case R.id.point4:
-                face.setImageResource(R.drawable.emoji_topright_f);
+                if (type.equals("2D") && female)
+                    face.setImageResource(R.drawable.emoji_topright_f);
+                //else if (type.equals("2D"))
+                //  face.setImageResource(R.drawable.emoji_up_m);
+                break;
+            case R.id.point5:
+                if (type.equals("2D") && female)
+                    face.setImageResource(R.drawable.emoji_up_f);
+                //else if (type.equals("2D"))
+                //  face.setImageResource(R.drawable.emoji_up_m);
+                break;
+            case R.id.point6:
+                if (type.equals("2D") && female)
+                    face.setImageResource(R.drawable.emoji_down_f);
+                //else if (type.equals("2D"))
+                //  face.setImageResource(R.drawable.emoji_down_m);
+                break;
+            case R.id.point7:
+                if (type.equals("2D") && female)
+                    face.setImageResource(R.drawable.emoji_left_f);
+                //else if (type.equals("2D"))
+                //  face.setImageResource(R.drawable.emoji_left_m);
+                break;
+            case R.id.point8:
+                if (type.equals("2D") && female)
+                    face.setImageResource(R.drawable.emoji_right_f);
+                //else if (type.equals("2D"))
+                //  face.setImageResource(R.drawable.emoji_right_m);
                 break;
         }
     }
@@ -189,6 +268,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         // check to see if score beats old score, display alert if yes
         // log score, overwriting prior
         points = 0;
+    }
+
+    /* hides all buttons that may have been active in last round */
+    private void hideButtons() {
+        point1.setVisibility(View.INVISIBLE);
+        point2.setVisibility(View.INVISIBLE);
+        point3.setVisibility(View.INVISIBLE);
+        point4.setVisibility(View.INVISIBLE);
+        point5.setVisibility(View.INVISIBLE);
+        point6.setVisibility(View.INVISIBLE);
+        point7.setVisibility(View.INVISIBLE);
+        point8.setVisibility(View.INVISIBLE);
     }
 
     private void setupActionBar() {
