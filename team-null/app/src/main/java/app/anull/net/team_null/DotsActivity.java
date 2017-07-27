@@ -7,8 +7,11 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class DotsActivity extends AppCompatActivity {
 
@@ -19,9 +22,13 @@ public class DotsActivity extends AppCompatActivity {
 
         setupActionBar();
 
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
+
+
 
         final TextView textView = (TextView) findViewById(R.id.textView);
         SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar);
+        seekBar.setProgress(pref.getInt("dotNum", 2)-1);
         textView.setText( (seekBar.getProgress()+1) + "/" + (seekBar.getMax() + 1));
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progress = 0;
@@ -35,6 +42,13 @@ public class DotsActivity extends AppCompatActivity {
                 editor = pref.edit();
                 editor.putInt("dotNum", progress+1);
                 editor.apply();
+
+                Context context = getApplicationContext();
+                CharSequence text = (progress+1)+ " Selected!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
 
                 textView.setText((progress+1) + "/" + (seekBar.getMax()+ 1));
 
@@ -53,6 +67,114 @@ public class DotsActivity extends AppCompatActivity {
                 // Display the value in textview
                 textView.setText((progress+1) + "/" + (seekBar.getMax()+1));
 
+            }
+        });
+
+        Button circle = (Button) findViewById(R.id.button1);
+        circle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor;
+                editor = pref.edit();
+                editor.putString("dotType", "circle");
+                editor.apply();
+                Context context = getApplicationContext();
+                CharSequence text = "Circle Selected!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
+        });
+
+        Button diamond = (Button) findViewById(R.id.button2);
+        diamond.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor;
+                editor = pref.edit();
+                editor.putString("dotType", "diamond");
+                editor.apply();
+                Context context = getApplicationContext();
+                CharSequence text = "Diamond Selected!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
+        });
+
+        Button heart = (Button) findViewById(R.id.button3);
+        heart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor;
+                editor = pref.edit();
+                editor.putString("dotType", "heart");
+                editor.apply();
+                Context context = getApplicationContext();
+                CharSequence text = "Heart Selected!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
+        });
+
+        Button square = (Button) findViewById(R.id.button4);
+        square.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor;
+                editor = pref.edit();
+                editor.putString("dotType", "square");
+                editor.apply();
+                Context context = getApplicationContext();
+                CharSequence text = "Square Selected!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
+        });
+
+        Button star = (Button) findViewById(R.id.button5);
+        star.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor;
+                editor = pref.edit();
+                editor.putString("dotType", "star");
+                editor.apply();
+                Context context = getApplicationContext();
+                CharSequence text = "Star Selected!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
+        });
+
+        Button triangle = (Button) findViewById(R.id.button6);
+        triangle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor;
+                editor = pref.edit();
+                editor.putString("dotType", "triangle");
+                editor.apply();
+                Context context = getApplicationContext();
+                CharSequence text = "Triangle Selected!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
             }
         });
     }
