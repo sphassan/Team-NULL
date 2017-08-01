@@ -37,7 +37,7 @@ sanName = re.compile(r'^[A-Za-z]+$')
 
 class S(BaseHTTPRequestHandler):
     def _set_headers(s):
-        s.send_response(404)
+        s.send_response(200)
         s.send_header('Content-type', 'text/html')
         s.end_headers()
 
@@ -52,12 +52,29 @@ class S(BaseHTTPRequestHandler):
         # Doesn't do anything with posted data
         length = int(s.headers.getheader('content-length'))
         data = s.rfile.read(length) 
-        data2 = data.split(",")
-        log.write(str(data2))
-        uid = ""; 
-        email = data2[0];
-        first = data2[1];
-        last  = data2[2];
+        temp = data.split("(")
+        fuct = temp[0];
+        yelo = temp[1];
+        data2 = yelo[:-1].split(",");
+        uid = "";
+        first = "";
+        last  = "";
+        email = "";
+        print str(data2)
+        if fuct == "register":
+            email = data2[0];
+            first = data2[1];
+            last  = data2[2];
+            
+        elif fuct == "stats":
+            uid   = data2[0];
+
+        elif fuct == "reregister":
+            uid   = data2[0];
+            email = data2[1];
+            first = data2[2];
+            last  = data2[3];
+
         is_valid = validate_email(email,check_mx=True)
         is_first = sanName.match(first)
         is_last  = sanName.match(last)
@@ -70,15 +87,25 @@ class S(BaseHTTPRequestHandler):
         
         if (not is_valid) or (is_first is None) or (is_last is None):
             s.send_response(666)
-        else:
+        elif fuct == "register":
             s.send_response(200)
             uid = str(uuid.uuid4())
             os.system("./emails.py "+email+" "+first+" welcomeMsg.txt")  
 
-        s.send_header('Content-type','text/html')
-        s.end_headers()
-        s.wfile.write("<html> "+uid+" </html>")
-        
+            s.send_header('Content-type','text/html')
+            s.end_headers()
+            s.wfile.write("<html> "+uid+" </html>")
+        else:
+            s._set_headers()
+def register(first, last, email):
+    print first+" "+last+" "+email
+    
+def stats(uid,stats):
+    print ""
+
+def reregister(uid, first, last, email):
+    print ""
+
 def run(server_class=HTTPServer, handler_class=S, port=80):
     server_address = ('', port)
     httpd = server_class(server_address, handler_class)
@@ -92,4 +119,3 @@ if __name__ == "__main__":
         run(port=int(8080))
     else:
         run()
-
