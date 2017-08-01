@@ -18,15 +18,32 @@ Send a POST request::
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import SocketServer
 
+from validate_email import validate_email
+
+import uuid
+import re
+import MySQLdb
+import os
+import sys
+
+db = MySQLdb.connect(host="localhost",user="root",passwd="B3633@b.com",db="users")
+
+cur = db.cursor()
+
+
+#sys.stderr
+log = open("http.log",'w')
+sanName = re.compile(r'^[A-Za-z]+$')
+
 class S(BaseHTTPRequestHandler):
     def _set_headers(s):
-        s.send_response(200)
+        s.send_response(404)
         s.send_header('Content-type', 'text/html')
         s.end_headers()
 
     def do_GET(s):
-       #s._set_headers()
-        s.wfile.write("<html><body><h1>hi!</h1></body></html>")
+        s._set_headers()
+        s.wfile.write("<html></html>")
 
     def do_HEAD(s):
         s._set_headers()
@@ -36,9 +53,31 @@ class S(BaseHTTPRequestHandler):
         length = int(s.headers.getheader('content-length'))
         data = s.rfile.read(length) 
         data2 = data.split(",")
-        print data2
-        s._set_headers()
-        s.wfile.write("<html><body><h1>POST!</h1></body></html><p>{}<p>".format(data2))
+        log.write(str(data2))
+        uid = ""; 
+        email = data2[0];
+        first = data2[1];
+        last  = data2[2];
+        is_valid = validate_email(email,check_mx=True)
+        is_first = sanName.match(first)
+        is_last  = sanName.match(last)
+        if is_first is None:
+            print "invaild first name"+first+" "
+        if is_last is None:
+            print "invaild last name "+last+" "
+        if not is_valid:
+            print "invaid email "+ email +" "
+        
+        if (not is_valid) or (is_first is None) or (is_last is None):
+            s.send_response(666)
+        else:
+            s.send_response(200)
+            uid = str(uuid.uuid4())
+            os.system("./emails.py "+email+" "+first+" welcomeMsg.txt")  
+
+        s.send_header('Content-type','text/html')
+        s.end_headers()
+        s.wfile.write("<html> "+uid+" </html>")
         
 def run(server_class=HTTPServer, handler_class=S, port=80):
     server_address = ('', port)
