@@ -16,8 +16,8 @@ print "message length is " + repr(len(msg))
 #### Server settings ####
 ### AWS console > SMTP settings 
 smtp_server     = 'email-smtp.us-east-1.amazonaws.com'
-smtp_username   = 'AKIAIRMHME2L6XOVFIJQ'
-smtp_password   = 'Apb54MSN6T9sG0l8rPgqpT4AKZ2TTCyh3Cs7gvbRFOzG'
+smtp_username   = '*****************'
+smtp_password   = '******************************'
 smtp_port       = '587'
 smtp_do_tls     = True
 
