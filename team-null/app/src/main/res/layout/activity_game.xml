@@ -16,7 +16,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/play_screen" />
+        android:src="@drawable/emoji_resting_f" />
 
     <Button
         android:id="@+id/start"

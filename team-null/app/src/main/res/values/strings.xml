@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Team-Null</string>
+    <string name="app_name">Glance</string>
     <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Settings -->
@@ -73,4 +73,33 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+    <string name="title_activity_register">Welcome!</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_first_name">First Name</string>
+    <string name="prompt_last_name">Last Name</string>
+    <string name="prompt_email">Email</string>
+    <string name="action_sign_in">Register</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name= "error_invalid_name">Names may only contain alphabetic characters</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="title_activity_dots">DotsActivity</string>
+
+    <string name="setting_button_convo">Conversation Partner</string>
+    <string name="title_activity_convo">ConvoActivity</string>
+
+    <string name="button_skip">Skip</string>
+
+    <string-array name="convo_array">
+        <item>Boy</item>
+        <item>Girl</item>
+    </string-array>
+
+    <string-array name="diff_array">
+        <item>1 - Basic 2D Images</item>
+        <item>2 - Basic 3D Images</item>
+        <item>3 - Simple Real Images</item>
+        <item>4 - Complex Real Images</item>
+    </string-array>
+
 </resources>

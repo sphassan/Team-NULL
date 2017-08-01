@@ -2,20 +2,25 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="app.anull.net.team_null">
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="[Unnamed Eye Contact Game]"
+        android:label="Glance"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="[Unnamed Eye Contact Game]">
+            android:label="Glance">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.DEFAULT" />
             </intent-filter>
         </activity>
         <activity android:name=".GameActivity" />
@@ -23,8 +28,23 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity
-            android:name=".NewSettingsActivity"
-            android:label="Settings"/>
+            android:name=".RegisterActivity"
+            android:label="@string/title_activity_register"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        <activity android:name=".AppEntryPoint">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".DotsActivity"
+            android:label="@string/title_activity_dots" />
+        <activity
+            android:name=".ConvoActivity"
+            android:label="@string/title_activity_convo" />
+        <activity android:name=".DiffActivity"></activity>
     </application>
 
 </manifest>

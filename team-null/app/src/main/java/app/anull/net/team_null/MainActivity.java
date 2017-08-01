@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finishAndRemoveTask();
+                System.exit(0); //might not do anything
             }
         });
     }

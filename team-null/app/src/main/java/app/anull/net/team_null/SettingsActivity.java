@@ -1,9 +1,12 @@
 package app.anull.net.team_null;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -12,6 +15,42 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         setupActionBar();
+        Button reg = (Button) findViewById(R.id.reg);
+        reg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SettingsActivity.this, RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button dots = (Button) findViewById(R.id.dots);
+        dots.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SettingsActivity.this, DotsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button convo = (Button) findViewById(R.id.convo);
+        convo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SettingsActivity.this, ConvoActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button diff = (Button) findViewById(R.id.diff);
+        diff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SettingsActivity.this, DiffActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void setupActionBar() {
