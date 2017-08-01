@@ -26,7 +26,7 @@ import MySQLdb
 import os
 import sys
 
-db = MySQLdb.connect(host="localhost",user="root",passwd="B3633@b.com",db="users")
+db = MySQLdb.connect(host="localhost",user="*******",passwd="********",db="users")
 
 cur = db.cursor()
 
