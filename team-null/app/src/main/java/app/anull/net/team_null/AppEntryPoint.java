@@ -37,6 +37,7 @@ public class AppEntryPoint extends AppCompatActivity {
             finish();
         } else { //if first time login
             redirect = new Intent(AppEntryPoint.this, RegisterActivity.class);
+            redirect.putExtra("EXTRA_INITIAL_REGISTER", true);
             startActivity(redirect);
             finish();
         }
