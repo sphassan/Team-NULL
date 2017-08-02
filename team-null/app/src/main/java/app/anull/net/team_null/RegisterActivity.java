@@ -44,7 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        //boolean for register vs reregister
+        //boolean for register vs re-register
         final boolean isInitialRegister = getIntent().getBooleanExtra("EXTRA_INITIAL_REGISTER", true);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -206,7 +206,6 @@ public class RegisterActivity extends AppCompatActivity {
         private boolean isFirstRegister;
         SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor;
-
         private final String UID = pref.getString("UID", "");
 
         UserLoginTask(String email, String firstName, String lastName, boolean isInitialRegister) {
@@ -230,24 +229,12 @@ public class RegisterActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                /*JSONObject userCredentials = new JSONObject();
-                try {
-                    userCredentials.put("email", mEmail);
-                } catch (JSONException e){
-                    e.printStackTrace();
-                }*/
-
-                //TODO:conditional for register vs reregister
-                //register: register(example@example.com,firstName,lastName) <html> (uid (32 character string + 4 dashes)) </html>
-                //for the stats activity: stats(uid)
-                //re-register: reregister(uid,example@example.com,firstName,lastName)
                 String postArray;
                 if(!isFirstRegister) {//UID MUST BE STORED IN PREFERENCES
                     postArray = "reregister("+UID+","+mEmail+","+mFirstName+","+mLastName+")";
                 } else {
                     postArray = "register("+mEmail+","+mFirstName+","+mLastName+")";
                 }
-                //OLD STRING String postArray = mEmail+","+mFirstName+","+mLastName;
 
                 try{
                     client.setRequestMethod("POST");
@@ -263,6 +250,9 @@ public class RegisterActivity extends AppCompatActivity {
                     client.connect();
                 } catch (Exception e) {
                     e.printStackTrace();
+                    Intent registerActivity = new Intent(RegisterActivity.this, RegisterActivity.class);
+                    startActivity(registerActivity);
+                    finish();
                 }
 
                 OutputStreamWriter out = null;
@@ -270,6 +260,9 @@ public class RegisterActivity extends AppCompatActivity {
                     out = new OutputStreamWriter(client.getOutputStream());
                 } catch (Exception e) {
                     e.printStackTrace();
+                    Intent registerActivity = new Intent(RegisterActivity.this, RegisterActivity.class);
+                    startActivity(registerActivity);
+                    finish();
                 }
                 try {
                     out.write(postArray);
@@ -289,7 +282,7 @@ public class RegisterActivity extends AppCompatActivity {
                         sb.append(line);
                     }
                     response = sb.toString();
-                    System.out.println("Response from brandon's server: " + response);
+                    //System.out.println("**-- Response from server: " + response + "--**");
                     editor = pref.edit();
                     editor.putString("UID", response.substring(7,43));
                     editor.commit();
@@ -298,7 +291,7 @@ public class RegisterActivity extends AppCompatActivity {
                 e.printStackTrace();
                 return false;
             }
-            System.out.println(responseCode);
+            System.out.println("**--  Code: " + responseCode + "--**");
             return true;
         }
 
@@ -306,7 +299,6 @@ public class RegisterActivity extends AppCompatActivity {
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
-            //compare response to what you should receive (current string is just testing for the server, as the server response changes so does this conditional) TODO: change it
             if (responseCode == 200) {
                 editor = pref.edit();
                 editor.putBoolean("LoggedIn", true);
@@ -314,12 +306,13 @@ public class RegisterActivity extends AppCompatActivity {
                 Intent mainActivity = new Intent(RegisterActivity.this, MainActivity.class);
                 startActivity(mainActivity);
                 finish();
-            } else {//Will need a new Intent and activity for waiting for confirmation
-                Log.d("STATUS", "login failed");
-                //TODO remove this test (problem was the preferences for the app getting changed were still under the old name. now that its all refactored all is well)
+            } else {
+                Log.d("STATUS", "login failed, Code:" + responseCode);
                 editor = pref.edit();
                 editor.putBoolean("LoggedIn", false);
                 editor.commit();
+                Intent registerActivity = new Intent(RegisterActivity.this, RegisterActivity.class);
+                startActivity(registerActivity);
                 finish();
             }
         }
