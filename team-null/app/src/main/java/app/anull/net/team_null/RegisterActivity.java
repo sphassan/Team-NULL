@@ -38,6 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
     private AutoCompleteTextView mLastNameView;
     private View mProgressView;
     private View mLoginFormView;
+    private boolean EXTRA_INITIAL_REGISTER;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -291,7 +292,7 @@ public class RegisterActivity extends AppCompatActivity {
                 e.printStackTrace();
                 return false;
             }
-            System.out.println("**--  Code: " + responseCode + "--**");
+            //System.out.println("**--  Code: " + responseCode + "--**");
             return true;
         }
 
@@ -308,9 +309,9 @@ public class RegisterActivity extends AppCompatActivity {
                 finish();
             } else {
                 Log.d("STATUS", "login failed, Code:" + responseCode);
-                editor = pref.edit();
-                editor.putBoolean("LoggedIn", false);
-                editor.commit();
+                //editor = pref.edit();
+                // editor.putBoolean("LoggedIn", false);
+                //editor.commit();
                 Intent registerActivity = new Intent(RegisterActivity.this, RegisterActivity.class);
                 startActivity(registerActivity);
                 finish();
