@@ -17,18 +17,30 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private int correctButton;
-    private int points;
-    private int incorrect;
-    private int dots;
+    private int correctButton; //ID for the correct button
+    private int points; //current score
+    private int incorrect; //number of incorrect buttons selected
+    private int dots; //number of dots
+    private int questions; //number of questions asked in the game
+    private int time; //time taken to select the correct dot
+    private ArrayList<String> selections; //ArrayList of selected dots, format of entries is {'dot name':time}, e.g. {'bottom-left':2}
+    private JSONObject question; //JSONified collection of all question data
+    private JSONObject game; //JSONified array of all questions in a game
     private TextView score;
+
+    private TimerTask onTime;
 
     ImageButton point1; //bottom-left
     ImageButton point2; //top-left
@@ -61,6 +73,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         ConstraintLayout layout = (ConstraintLayout) findViewById(R.id.game_layout);
         ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+
+        questions = 0;
+        time = 0;
+        selections = new ArrayList<>();
+        question = new JSONObject();
+        game = new JSONObject();
 
         score = new TextView(this);
         score.setVisibility(View.INVISIBLE);
@@ -104,6 +122,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     // handles all dot clicks
     public void onClick(View v) {
         Log.d("CLICKED", ""+v.getId());
+        time = 60 - (int)(onTime.scheduledExecutionTime() - (new Date().getTime()))/1000;
+        selections.add("{" + getButtonFromId(v.getId()) + ":" + time + "}");
         if (v.getId() == correctButton) {
             MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.correct);
             mp.start();
@@ -112,6 +132,19 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             AlertDialog dialog = builder.create();
             dialog.show();
             points += 100 - ((double)incorrect/dots * 100);
+
+            questions++;
+
+            try {
+                addQuestion();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            time = 0;
+            selections = new ArrayList<>();
+            question = new JSONObject();
+
             hideButtons();
             startGame();
         }
@@ -128,7 +161,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         points = 0;
         Timer time = new Timer();
         final GameActivity game = this;
-        time.schedule(new TimerTask() {
+        onTime = new TimerTask() {
             @Override
             public void run() {
                 SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
@@ -176,15 +209,21 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     editor.commit();
                 }
 
+                try {
+                    game.send();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 game.refresh();
                 game.endGame();
             }
-        }, 60 * 1000);
+        };
+        time.schedule(onTime, 60 * 1000);
         Log.d("SET", "game set");
     }
 
 
-    // TODO: transfer to stats activity instead of main menu
+    // TODO: transfer to review activity instead of main menu
     private void endGame() {
         Intent intent = new Intent(GameActivity.this, MainActivity.class);
         startActivity(intent);
@@ -192,9 +231,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     // TODO: gather statistics from in game
     // TODO: finalize 3D assets, real pictures and implement
-    // TODO: make dots have transparent instead of white background
     // TODO: resize face to not touch sides of screen
-    // TODO: implement pre-generated and aesthetic point patterns instead of randomized
     // sets a singular game state
     private void startGame() {
         SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", MODE_PRIVATE);
@@ -365,7 +402,33 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    /* refresh high score after every 60 second play session */
+    private void addQuestion() throws JSONException {
+        question.put("points", points);
+        question.put("times", time);
+        question.put("incorrect", incorrect);
+        question.put("selections", selections);
+        game.put("Question " + questions, question);
+    }
+
+    private void send() throws JSONException {
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
+        game.put("dotNum", pref.getInt("dotNum", 2));
+        game.put("dotType", pref.getString("dotType", "circle"));
+        game.put("isFemale", pref.getBoolean("isFemale", true));
+        game.put("faceType", pref.getString("faceType", "2D"));
+
+        // call HTTP request method with Stringified game
+
+        /*
+        * Example Stringified Game JSON
+        *
+        * {'dotNum':2, 'dotType':circle, 'isFemale':true, 'faceType':'2D', 'Question 1':{'points':1000, 'time':12, 'incorrect':1, selections:{'bottom-left':5, 'bottom-right':12}}}
+        *
+        * Sent as a String, no logic is required until it hits the server at which point it must be JSONified and parsed to form the email
+        * */
+    }
+
+    /* refresh values after every 60 second play session */
     private void refresh() {
         SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
 
@@ -379,6 +442,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         editor.commit();
 
         points = 0;
+
+        game = new JSONObject();
     }
 
     /* hides all buttons that may have been active in last round */
@@ -391,6 +456,26 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         point6.setVisibility(View.INVISIBLE);
         point7.setVisibility(View.INVISIBLE);
         point8.setVisibility(View.INVISIBLE);
+    }
+
+    public String getButtonFromId(int id) {
+        if (id == point1.getId())
+            return "bottom-left";
+        if (id == point2.getId())
+            return "top-left";
+        if (id == point3.getId())
+            return "bottom-right";
+        if (id == point4.getId())
+            return "top-right";
+        if (id == point5.getId())
+            return "center-top";
+        if (id == point6.getId())
+            return "center-bottom";
+        if (id == point7.getId())
+            return "center-left";
+        if (id == point8.getId())
+            return "center-right";
+        return "error";
     }
 
     private void setupActionBar() {
