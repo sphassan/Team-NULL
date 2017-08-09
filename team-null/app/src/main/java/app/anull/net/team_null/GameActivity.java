@@ -34,7 +34,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private int incorrect; //number of incorrect buttons selected
     private int dots; //number of dots
     private int questions; //number of questions asked in the game
-    private int time; //time taken to select the correct dot
+    private int time; //time taken to select the correct dot in seconds
     private ArrayList<String> selections; //ArrayList of selected dots, format of entries is {'dot name':time}, e.g. {'bottom-left':2}
     private JSONObject question; //JSONified collection of all question data
     private JSONObject game; //JSONified array of all questions in a game
@@ -229,7 +229,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(intent);
     }
 
-    // TODO: gather statistics from in game
     // TODO: finalize 3D assets, real pictures and implement
     // TODO: resize face to not touch sides of screen
     // sets a singular game state
@@ -373,7 +372,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 if (type.equals("2D") && female)
                     face.setImageResource(R.drawable.emoji_topright_f);
                 else if (type.equals("2D"))
-                  face.setImageResource(R.drawable.emoji_up_m);
+                  face.setImageResource(R.drawable.emoji_topright_m);
                 break;
             case R.id.point5:
                 if (type.equals("2D") && female)
@@ -404,7 +403,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private void addQuestion() throws JSONException {
         question.put("points", points);
-        question.put("times", time);
+        question.put("time", time);
         question.put("incorrect", incorrect);
         question.put("selections", selections);
         game.put("Question " + questions, question);
@@ -417,12 +416,36 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         game.put("isFemale", pref.getBoolean("isFemale", true));
         game.put("faceType", pref.getString("faceType", "2D"));
 
-        // call HTTP request method with Stringified game
+        String gameOut = game.toString();
+        Log.d("GAME JSON", gameOut);
+
+        // call HTTP request method with gameOut
 
         /*
-        * Example Stringified Game JSON
+        * Example Stringified Game JSON - real data
         *
-        * {'dotNum':2, 'dotType':circle, 'isFemale':true, 'faceType':'2D', 'Question 1':{'points':1000, 'time':12, 'incorrect':1, selections:{'bottom-left':5, 'bottom-right':12}}}
+        * {"Question 1":{"points":100,"times":4,"incorrect":0,"selections":"[{center-top:4}]"},
+        * "Question 2":{"points":175,"times":9,"incorrect":1,"selections":"[{center-right:7}, {center-top:9}]"},
+        * "Question 3":{"points":275,"times":12,"incorrect":0,"selections":"[{center-top:12}]"},
+        * "Question 4":{"points":300,"times":19,"incorrect":3,"selections":"[{bottom-left:15}, {center-left:16}, {top-left:17}, {top-right:19}]"},
+        * "Question 5":{"points":400,"times":21,"incorrect":0,"selections":"[{bottom-right:21}]"},
+        * "Question 6":{"points":500,"times":24,"incorrect":0,"selections":"[{top-left:24}]"},
+        * "Question 7":{"points":600,"times":26,"incorrect":0,"selections":"[{center-top:26}]"},
+        * "Question 8":{"points":700,"times":29,"incorrect":0,"selections":"[{bottom-right:29}]"},
+        * "Question 9":{"points":800,"times":31,"incorrect":0,"selections":"[{center-right:31}]"},
+        * "Question 10":{"points":900,"times":33,"incorrect":0,"selections":"[{center-right:33}]"},
+        * "Question 11":{"points":1000,"times":36,"incorrect":0,"selections":"[{bottom-left:36}]"},
+        * "Question 12":{"points":1100,"times":39,"incorrect":0,"selections":"[{bottom-right:39}]"},
+        * "Question 13":{"points":1200,"times":41,"incorrect":0,"selections":"[{bottom-right:41}]"},
+        * "Question 14":{"points":1300,"times":43,"incorrect":0,"selections":"[{center-bottom:43}]"},
+        * "Question 15":{"points":1400,"times":45,"incorrect":0,"selections":"[{center-left:45}]"},
+        * "Question 16":{"points":1500,"times":47,"incorrect":0,"selections":"[{center-right:47}]"},
+        * "Question 17":{"points":1600,"times":50,"incorrect":0,"selections":"[{top-right:50}]"},
+        * "Question 18":{"points":1700,"times":52,"incorrect":0,"selections":"[{top-right:52}]"},
+        * "Question 19":{"points":1800,"times":54,"incorrect":0,"selections":"[{center-bottom:54}]"},
+        * "Question 20":{"points":1900,"times":57,"incorrect":0,"selections":"[{center-top:57}]"},
+        * "Question 21":{"points":2000,"times":60,"incorrect":0,"selections":"[{bottom-left:60}]"},
+        * "dotNum":4,"dotType":"heart","isFemale":false,"faceType":"2D"}
         *
         * Sent as a String, no logic is required until it hits the server at which point it must be JSONified and parsed to form the email
         * */
