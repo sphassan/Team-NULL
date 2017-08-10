@@ -1,12 +1,23 @@
 package app.anull.net.team_null;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.InetAddress;
+import java.net.URL;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -15,6 +26,9 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         setupActionBar();
+        final SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
+        final String UID = pref.getString("UID", "");
+
         Button reg = (Button) findViewById(R.id.reg);
         reg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -22,6 +36,11 @@ public class SettingsActivity extends AppCompatActivity {
                 Intent intent = new Intent(SettingsActivity.this, RegisterActivity.class);
                 intent.putExtra("EXTRA_INITIAL_REGISTER", false);
                 startActivity(intent);
+                boolean SuccessfulReReg = pref.getBoolean("Successful Reregister", true);
+                if(SuccessfulReReg) {
+                    pref.edit().putBoolean("Successful Reregister", false);
+                    finish();
+                }
             }
         });
 
@@ -52,6 +71,23 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        Button send = (Button) findViewById(R.id.send);
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(SettingsActivity.this)
+                        .setTitle("Email Statistics?")
+                        .setMessage("Are you sure you want to request an email for statistics?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                makeRequest(UID);
+                            }})
+                        .setNegativeButton(android.R.string.no, null).show();
+            }
+        });
+
     }
 
     private void setupActionBar() {
@@ -72,5 +108,61 @@ public class SettingsActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void makeRequest(String UID) {
+        String postArray = "sendstats("+UID+")";
+        int responseCode = 42;//default will stay as 42 if server gives no response
+        try {
+            InetAddress addr = InetAddress.getByName("184.72.86.223");
+            URL url = new URL("http://"+addr.getHostAddress()+"/sendstats");
+
+            HttpURLConnection client = null;
+            try {
+                client = (HttpURLConnection) url.openConnection();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try{
+                client.setRequestMethod("POST");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                client.setRequestProperty("Content-Type", "text/plain");
+                client.setRequestProperty("charset", "utf-8");
+                client.setRequestProperty("Content-Length", Integer.toString(postArray.length()));
+                client.setUseCaches(false);
+                client.setDoOutput(true);
+                client.connect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            OutputStreamWriter out = null;
+            try {
+                out = new OutputStreamWriter(client.getOutputStream());
+            } catch (Exception e) {
+                e.printStackTrace();
+
+                Context context = getApplicationContext();
+                CharSequence text = ("Failed to connect!");
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
+            try {
+                out.write(postArray);
+                out.flush();
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            responseCode = client.getResponseCode();
+        }  catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("**--  Code: " + responseCode + "--**");
     }
 }

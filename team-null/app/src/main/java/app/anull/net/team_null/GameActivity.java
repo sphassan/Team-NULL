@@ -4,11 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
+import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,11 +16,16 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Time;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.InetAddress;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
@@ -227,6 +232,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private void endGame() {
         Intent intent = new Intent(GameActivity.this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
     // TODO: finalize 3D assets, real pictures and implement
@@ -420,6 +426,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         Log.d("GAME JSON", gameOut);
 
         // call HTTP request method with gameOut
+        String UID = pref.getString("UID", "");
+        makeRequest(UID, gameOut);
 
         /*
         * Example Stringified Game JSON - real data
@@ -449,6 +457,68 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         *
         * Sent as a String, no logic is required until it hits the server at which point it must be JSONified and parsed to form the email
         * */
+    }
+
+    private void makeRequest(String UID, String JSON) {
+        String postArray = "upload("+UID+";"+JSON+")";
+        int responseCode = 42;//default will stay as 42 if server gives no response
+        try {
+            InetAddress addr = InetAddress.getByName("184.72.86.223");
+            URL url = new URL("http://"+addr.getHostAddress()+"/upload");
+
+            HttpURLConnection client = null;
+            try {
+                client = (HttpURLConnection) url.openConnection();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try{
+                client.setRequestMethod("POST");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                client.setRequestProperty("Content-Type", "text/plain");
+                client.setRequestProperty("charset", "utf-8");
+                client.setRequestProperty("Content-Length", Integer.toString(postArray.length()));
+                client.setUseCaches(false);
+                client.setDoOutput(true);
+                client.connect();
+            } catch (Exception e) {
+                e.printStackTrace();
+
+                Context context = getApplicationContext();
+                CharSequence text = ("Connection error!");
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
+            OutputStreamWriter out = null;
+            try {
+                out = new OutputStreamWriter(client.getOutputStream());
+            } catch (Exception e) {
+                e.printStackTrace();
+
+                Context context = getApplicationContext();
+                CharSequence text = ("Failed to connect!");
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
+            try {
+                out.write(postArray);
+                out.flush();
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            responseCode = client.getResponseCode();
+        }  catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("**--  Code: " + responseCode + "--**");
     }
 
     /* refresh values after every 60 second play session */

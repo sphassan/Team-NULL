@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -60,6 +61,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -97,9 +99,7 @@ public class RegisterActivity extends AppCompatActivity {
         boolean cancel = false;
         View focusView = null;
 
-
         // Check for a valid first name, last name, email.
-
         if(TextUtils.isEmpty(firstName)) {
             mFirstNameView.setError(getString(R.string.error_field_required));
             focusView = mFirstNameView;
@@ -219,22 +219,25 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
 
+            String postArray;
+            String registerType;
+            if(!isFirstRegister) {
+                registerType = "reregister";
+                postArray = registerType+"("+UID+","+mEmail+","+mFirstName+","+mLastName+")";
+            } else {
+                registerType = "register";
+                postArray = registerType+"("+mEmail+","+mFirstName+","+mLastName+")";
+            }
+
             try {
                 InetAddress addr = InetAddress.getByName("184.72.86.223");
-                URL url = new URL("http://"+addr.getHostAddress());
+                URL url = new URL("http://"+addr.getHostAddress()+"/"+registerType);
 
                 HttpURLConnection client = null;
                 try {
                     client = (HttpURLConnection) url.openConnection();
                 } catch (IOException e) {
                     e.printStackTrace();
-                }
-
-                String postArray;
-                if(!isFirstRegister) {//UID MUST BE STORED IN PREFERENCES
-                    postArray = "reregister("+UID+","+mEmail+","+mFirstName+","+mLastName+")";
-                } else {
-                    postArray = "register("+mEmail+","+mFirstName+","+mLastName+")";
                 }
 
                 try{
@@ -251,6 +254,13 @@ public class RegisterActivity extends AppCompatActivity {
                     client.connect();
                 } catch (Exception e) {
                     e.printStackTrace();
+
+                    Context context = getApplicationContext();
+                    CharSequence text = ("Failed to connect!");
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+
                     Intent registerActivity = new Intent(RegisterActivity.this, RegisterActivity.class);
                     startActivity(registerActivity);
                     finish();
@@ -261,6 +271,13 @@ public class RegisterActivity extends AppCompatActivity {
                     out = new OutputStreamWriter(client.getOutputStream());
                 } catch (Exception e) {
                     e.printStackTrace();
+
+                    Context context = getApplicationContext();
+                    CharSequence text = ("Failed to connect!");
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+
                     Intent registerActivity = new Intent(RegisterActivity.this, RegisterActivity.class);
                     startActivity(registerActivity);
                     finish();
@@ -286,13 +303,18 @@ public class RegisterActivity extends AppCompatActivity {
                     //System.out.println("**-- Response from server: " + response + "--**");
                     editor = pref.edit();
                     editor.putString("UID", response.substring(7,43));
+                    editor.putBoolean("Successful Reregister", false);
+                    editor.commit();
+                } else if(!isFirstRegister && responseCode == 200) {
+                    editor = pref.edit();
+                    editor.putBoolean("Successful Reregister", true);
                     editor.commit();
                 }
             }  catch (Exception e) {
                 e.printStackTrace();
                 return false;
             }
-            //System.out.println("**--  Code: " + responseCode + "--**");
+            System.out.println("**--  Code: " + responseCode + "--**");
             return true;
         }
 
@@ -309,9 +331,14 @@ public class RegisterActivity extends AppCompatActivity {
                 finish();
             } else {
                 Log.d("STATUS", "login failed, Code:" + responseCode);
-                //editor = pref.edit();
-                // editor.putBoolean("LoggedIn", false);
-                //editor.commit();
+
+                Context context = getApplicationContext();
+                CharSequence text = ("Failed to register!");
+                pref.edit().putBoolean("Successful Reregister", false);
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+
                 Intent registerActivity = new Intent(RegisterActivity.this, RegisterActivity.class);
                 startActivity(registerActivity);
                 finish();

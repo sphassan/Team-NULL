@@ -19,7 +19,7 @@ public class AppEntryPoint extends AppCompatActivity {
         Intent redirect;
 
         SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", MODE_PRIVATE);
-
+        pref.edit().putBoolean("Successful Reregister", false);
         /* comment out the following block unless testing requires that ALL preferences be removed at startup */
         /*
         SharedPreferences.Editor editor;

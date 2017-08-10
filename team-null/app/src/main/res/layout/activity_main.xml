@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="#94cec8"
     tools:context="app.anull.net.team_null.MainActivity">
 
     <LinearLayout
@@ -33,33 +33,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <Button
                 android:id="@+id/play"
-                android:background="#ffffff"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="play"
-                android:drawableTop="@drawable/play_button">
-            </Button>
+                android:background="#94cec8"
+                android:drawableTop="@drawable/play_button"
+                android:text="play"></Button>
+
             <Button
                 android:id="@+id/settings"
-                android:background="#ffffff"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="settings"
-                android:drawableTop="@drawable/settings_button">
-            </Button>
+                android:background="#94cec8"
+                android:drawableTop="@drawable/settings_button"
+                android:text="settings"></Button>
+
             <Button
                 android:id="@+id/quit"
-                android:background="#ffffff"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="quit"
-                android:drawableTop="@drawable/quit_button">
-            </Button>
+                android:background="#94cec8"
+                android:drawableTop="@drawable/quit_button"
+                android:text="quit"></Button>
         </LinearLayout>
     </LinearLayout>
 

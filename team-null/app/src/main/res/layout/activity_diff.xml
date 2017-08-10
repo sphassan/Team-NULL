@@ -21,6 +21,7 @@
             style="@style/Widget.AppCompat.Button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:backgroundTint="#00897B"
             android:text="Level 1 - Basic 2D Images"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="0dp" />
@@ -30,6 +31,7 @@
             style="@style/Widget.AppCompat.Button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:backgroundTint="#00897B"
             android:text="Level 2 - Basic 3D Images"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="0dp" />
@@ -39,6 +41,7 @@
             style="@style/Widget.AppCompat.Button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:backgroundTint="#00897B"
             android:text="Level 3 - Simple Real Images"
             android:textAlignment="textStart"
             tools:layout_editor_absoluteX="0dp"
@@ -49,6 +52,7 @@
             style="@style/Widget.AppCompat.Button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:backgroundTint="#00897B"
             android:text="Level 4 - Complex Real Images"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="0dp" />

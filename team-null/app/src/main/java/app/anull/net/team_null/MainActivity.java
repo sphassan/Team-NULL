@@ -1,6 +1,8 @@
 package app.anull.net.team_null;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -12,6 +14,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        final SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
 
         Button play = (Button) findViewById(R.id.play);
         play.setOnClickListener(new View.OnClickListener() {
@@ -39,5 +43,6 @@ public class MainActivity extends AppCompatActivity {
                 System.exit(0); //might not do anything
             }
         });
+
     }
 }
