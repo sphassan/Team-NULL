@@ -132,10 +132,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         if (v.getId() == correctButton) {
             MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.correct);
             mp.start();
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            /*AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Correct!");
             AlertDialog dialog = builder.create();
-            dialog.show();
+            dialog.show();*/
             points += 100 - ((double)incorrect/dots * 100);
 
             questions++;
