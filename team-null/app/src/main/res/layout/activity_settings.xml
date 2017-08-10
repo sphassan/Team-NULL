@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="#00897B"
+            android:backgroundTint="#7fa87f"
             android:text="Dots"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="16dp" />
@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1.92"
-            android:backgroundTint="#00897B"
+            android:backgroundTint="#7fa87f"
             android:text="@string/setting_button_convo"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="64dp" />
@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="#00897B"
+            android:backgroundTint="#7fa87f"
             android:text="Difficulty"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="112dp" />
@@ -56,7 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="#00897B"
+            android:backgroundTint="#7fa87f"
             android:text="Re-Register"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="16dp" />
@@ -66,7 +66,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="#00897B"
+            android:backgroundTint="#7fa87f"
             android:text="Send Email"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="16dp" />
