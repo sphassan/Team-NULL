@@ -417,6 +417,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private void send() throws JSONException {
         SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
+        game.put("questions", questions);
         game.put("dotNum", pref.getInt("dotNum", 2));
         game.put("dotType", pref.getString("dotType", "circle"));
         game.put("isFemale", pref.getBoolean("isFemale", true));
