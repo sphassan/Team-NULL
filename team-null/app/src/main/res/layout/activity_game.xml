@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/face"
-        android:layout_width="257dp"
-        android:layout_height="310dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
         android:src="@drawable/emoji_resting_f"
         app:layout_constraintBottom_toBottomOf="parent"

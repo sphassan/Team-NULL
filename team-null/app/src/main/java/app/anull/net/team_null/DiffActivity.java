@@ -53,7 +53,11 @@ public class DiffActivity extends AppCompatActivity {
         basic3D.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor;
+                editor = pref.edit();
+                editor.putString("faceType", "3D");
+                editor.apply();
                 Context context = getApplicationContext();
                 CharSequence text = "Basic 3D Selected!";
                 int duration = Toast.LENGTH_SHORT;
@@ -67,7 +71,12 @@ public class DiffActivity extends AppCompatActivity {
         simple.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor;
+                editor = pref.edit();
+                editor.putString("faceType", "real");
+                editor.putString("backgroundType", "simple");
+                editor.apply();
                 Context context = getApplicationContext();
                 CharSequence text = "Simple Real Images Selected!";
                 int duration = Toast.LENGTH_SHORT;
@@ -81,7 +90,12 @@ public class DiffActivity extends AppCompatActivity {
         complex.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor;
+                editor = pref.edit();
+                editor.putString("faceType", "real");
+                editor.putString("backgroundType", "complex");
+                editor.apply();
                 Context context = getApplicationContext();
                 CharSequence text = "Complex Real Images Selected!";
                 int duration = Toast.LENGTH_SHORT;
