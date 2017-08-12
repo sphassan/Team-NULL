@@ -7,7 +7,6 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -120,8 +119,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         if (!female && type.equals("2D"))
             face.setImageResource(R.drawable.emoji_resting_m);
-        //else if (female && type.equals("3D"))
-        //else if (type.equals("3D"))
+        else if (female && type.equals("3D"))
+            face.setImageResource(R.drawable.model_resting_f);
+        else if (type.equals("3D"))
+            face.setImageResource(R.drawable.model_resting_m);
+        else if (female && type.equals("real"))
+            face.setImageResource(R.drawable.picture_resting_f);
+        else if (type.equals("real"))
+            face.setImageResource(R.drawable.picture_resting_m);
     }
 
     // handles all dot clicks
@@ -173,9 +178,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 SharedPreferences.Editor editor;
                 editor = pref.edit();
 
-                // TODO: add changing face as a pseudorandom change
                 Random r = new Random();
-                int rand = r.nextInt(2);
+                int rand = r.nextInt(3);
                 if (rand == 0) {
                     int temp = pref.getInt("dotNum", 2);
                     Log.d("GET DOTS", ""+temp);
@@ -213,6 +217,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     editor.putString("dotType", shape);
                     editor.commit();
                 }
+                else if (rand == 2) {
+                    switch (pref.getString("faceType", "2D")) {
+                        case "2D":
+                            editor.putString("faceType", "3D");
+                            editor.commit();
+                            break;
+                        case "3D":
+                            editor.putString("faceType", "real");
+                            editor.commit();
+                            break;
+                    }
+                }
 
                 try {
                     game.send();
@@ -235,8 +251,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         finish();
     }
 
-    // TODO: finalize 3D assets, real pictures and implement
-    // TODO: resize face to not touch sides of screen
+    // TODO: resize emoji face to not touch sides of screen, all others are fine
     // sets a singular game state
     private void startGame() {
         SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", MODE_PRIVATE);
@@ -361,48 +376,112 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     face.setImageResource(R.drawable.emoji_bottomleft_f);
                 else if (type.equals("2D"))
                     face.setImageResource(R.drawable.emoji_bottomleft_m);
+                else if (type.equals("3D") && female)
+                    face.setImageResource(R.drawable.model_bottomleft_f);
+                else if (type.equals("3D"))
+                    face.setImageResource(R.drawable.model_bottomleft_m);
+                else if (type.equals("real") && female)
+                    face.setImageResource(R.drawable.picture_bottomleft_f);
+                else if (type.equals("real"))
+                    face.setImageResource(R.drawable.picture_bottomleft_m);
                 break;
             case R.id.point2:
                 if (type.equals("2D") && female)
                     face.setImageResource(R.drawable.emoji_topleft_f);
                 else if (type.equals("2D"))
                     face.setImageResource(R.drawable.emoji_topleft_m);
+                else if (type.equals("3D") && female)
+                    face.setImageResource(R.drawable.model_topleft_f);
+                else if (type.equals("3D"))
+                    face.setImageResource(R.drawable.model_topleft_m);
+                else if (type.equals("real") && female)
+                    face.setImageResource(R.drawable.picture_topleft_f);
+                else if (type.equals("real"))
+                    face.setImageResource(R.drawable.picture_topleft_m);
                 break;
             case R.id.point3:
                 if (type.equals("2D") && female)
                     face.setImageResource(R.drawable.emoji_bottomright_f);
                 else if (type.equals("2D"))
                     face.setImageResource(R.drawable.emoji_bottomright_m);
+                else if (type.equals("3D") && female)
+                    face.setImageResource(R.drawable.model_bottomright_f);
+                else if (type.equals("3D"))
+                    face.setImageResource(R.drawable.model_bottomright_m);
+                else if (type.equals("real") && female)
+                    face.setImageResource(R.drawable.picture_bottomright_f);
+                else if (type.equals("real"))
+                    face.setImageResource(R.drawable.picture_bottomright_m);
                 break;
             case R.id.point4:
                 if (type.equals("2D") && female)
                     face.setImageResource(R.drawable.emoji_topright_f);
                 else if (type.equals("2D"))
                   face.setImageResource(R.drawable.emoji_topright_m);
+                else if (type.equals("3D") && female)
+                    face.setImageResource(R.drawable.model_topright_f);
+                else if (type.equals("3D"))
+                    face.setImageResource(R.drawable.model_topright_m);
+                else if (type.equals("real") && female)
+                    face.setImageResource(R.drawable.picture_topright_f);
+                else if (type.equals("real"))
+                    face.setImageResource(R.drawable.picture_topright_m);
                 break;
             case R.id.point5:
                 if (type.equals("2D") && female)
                     face.setImageResource(R.drawable.emoji_up_f);
                 else if (type.equals("2D"))
                   face.setImageResource(R.drawable.emoji_up_m);
+                else if (type.equals("3D") && female)
+                    face.setImageResource(R.drawable.model_up_f);
+                else if (type.equals("3D"))
+                    face.setImageResource(R.drawable.model_up_m);
+                else if (type.equals("real") && female)
+                    face.setImageResource(R.drawable.picture_up_f);
+                else if (type.equals("real"))
+                    face.setImageResource(R.drawable.picture_up_m);
                 break;
             case R.id.point6:
                 if (type.equals("2D") && female)
                     face.setImageResource(R.drawable.emoji_down_f);
                 else if (type.equals("2D"))
                   face.setImageResource(R.drawable.emoji_down_m);
+                else if (type.equals("3D") && female)
+                    face.setImageResource(R.drawable.model_down_f);
+                else if (type.equals("3D"))
+                    face.setImageResource(R.drawable.model_down_m);
+                else if (type.equals("real") && female)
+                    face.setImageResource(R.drawable.picture_down_f);
+                else if (type.equals("real"))
+                    face.setImageResource(R.drawable.picture_down_m);
                 break;
             case R.id.point7:
                 if (type.equals("2D") && female)
                     face.setImageResource(R.drawable.emoji_left_f);
                 else if (type.equals("2D"))
                   face.setImageResource(R.drawable.emoji_left_m);
+                else if (type.equals("3D") && female)
+                    face.setImageResource(R.drawable.model_left_f);
+                else if (type.equals("3D"))
+                    face.setImageResource(R.drawable.model_left_m);
+                else if (type.equals("real") && female)
+                    face.setImageResource(R.drawable.picture_left_f);
+                else if (type.equals("real"))
+                    face.setImageResource(R.drawable.picture_left_m);
                 break;
             case R.id.point8:
                 if (type.equals("2D") && female)
                     face.setImageResource(R.drawable.emoji_right_f);
                 else if (type.equals("2D"))
                   face.setImageResource(R.drawable.emoji_right_m);
+                else if (type.equals("3D") && female)
+                    face.setImageResource(R.drawable.model_right_f);
+                else if (type.equals("3D"))
+                    face.setImageResource(R.drawable.model_right_m);
+                else if (type.equals("real") && female)
+                    face.setImageResource(R.drawable.picture_right_f);
+                else if (type.equals("real"))
+                    face.setImageResource(R.drawable.picture_right_m);
                 break;
         }
     }
