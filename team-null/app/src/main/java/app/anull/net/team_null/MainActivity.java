@@ -39,8 +39,9 @@ public class MainActivity extends AppCompatActivity {
         quit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finishAndRemoveTask();
-                System.exit(0); //might not do anything
+                //finishAndRemoveTask(); //might not do anything
+                //System.exit(0); //might not do anything either
+                android.os.Process.killProcess(android.os.Process.myPid());
             }
         });
 

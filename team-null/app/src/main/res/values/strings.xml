@@ -81,7 +81,7 @@
     <string name="prompt_email">Email</string>
     <string name="action_sign_in">Register</string>
     <string name="error_invalid_email">This email address is invalid</string>
-    <string name= "error_invalid_name">Names may only contain alphabetic characters</string>
+    <string name="error_invalid_name">Names may only contain alphabetic characters</string>
     <string name="error_field_required">This field is required</string>
     <string name="title_activity_dots">DotsActivity</string>
 
@@ -89,6 +89,8 @@
     <string name="title_activity_convo">ConvoActivity</string>
 
     <string name="button_skip">Skip</string>
+
+    <string name="review">Game completed!\n\nYou scored %1$d points and answered %2$d questions.\n%3$s</string>
 
     <string-array name="convo_array">
         <item>Boy</item>

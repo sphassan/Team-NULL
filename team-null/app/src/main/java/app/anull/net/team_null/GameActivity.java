@@ -33,6 +33,7 @@ import java.util.TimerTask;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private boolean beat; //true/false for if they beat prior high score
     private int correctButton; //ID for the correct button
     private int points; //current score
     private int incorrect; //number of incorrect buttons selected
@@ -246,7 +247,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     // TODO: transfer to review activity instead of main menu
     private void endGame() {
-        Intent intent = new Intent(GameActivity.this, MainActivity.class);
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor;
+        editor = pref.edit();
+
+        editor.putInt("questions", questions);
+        editor.putBoolean("beat", beat);
+        editor.commit();
+
+        Intent intent = new Intent(GameActivity.this, ReviewActivity.class);
         startActivity(intent);
         finish();
     }
@@ -605,9 +614,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private void refresh() {
         SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
 
-        if (pref.getInt("oldScore", 0) < points) {
-            // TODO: do something when this happens
-        }
+        if (pref.getInt("oldScore", 0) < points)
+            beat = true;
+        else
+            beat = false;
 
         SharedPreferences.Editor editor;
         editor = pref.edit();
