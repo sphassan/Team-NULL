@@ -82,7 +82,19 @@ public class SettingsActivity extends AppCompatActivity {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                makeRequest(UID);
+                                Thread thread = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try{
+                                            makeRequest(UID);
+                                        }catch (Exception e){
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                });
+                                thread.start();
+
                             }})
                         .setNegativeButton(android.R.string.no, null).show();
             }
@@ -112,24 +124,31 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void makeRequest(String UID) {
         String postArray = "sendstats("+UID+")";
-        int responseCode = 42;//default will stay as 42 if server gives no response
+
+        int responseCode = 4333333;//default will stay as 42 if server gives no response
         try {
+            //System.out.println("here 1 ");
             InetAddress addr = InetAddress.getByName("184.72.86.223");
             URL url = new URL("http://"+addr.getHostAddress()+"/sendstats");
-
+//            System.out.println(url.toString() + "find");
             HttpURLConnection client = null;
             try {
+
                 client = (HttpURLConnection) url.openConnection();
             } catch (IOException e) {
+                System.out.println("here 2 ");
                 e.printStackTrace();
             }
 
             try{
+
                 client.setRequestMethod("POST");
             } catch (Exception e) {
+                System.out.println("here 3 ");
                 e.printStackTrace();
             }
             try {
+
                 client.setRequestProperty("Content-Type", "text/plain");
                 client.setRequestProperty("charset", "utf-8");
                 client.setRequestProperty("Content-Length", Integer.toString(postArray.length()));
@@ -137,12 +156,15 @@ public class SettingsActivity extends AppCompatActivity {
                 client.setDoOutput(true);
                 client.connect();
             } catch (Exception e) {
+                System.out.println("here 4 ");
                 e.printStackTrace();
             }
-            OutputStreamWriter out = null;
+            OutputStreamWriter out2 = null;
             try {
-                out = new OutputStreamWriter(client.getOutputStream());
+
+                out2 = new OutputStreamWriter(client.getOutputStream());
             } catch (Exception e) {
+                System.out.println("here 5 ");
                 e.printStackTrace();
 
                 Context context = getApplicationContext();
@@ -152,15 +174,18 @@ public class SettingsActivity extends AppCompatActivity {
                 toast.show();
             }
             try {
-                out.write(postArray);
-                out.flush();
-                out.close();
+
+                out2.write(postArray);
+                out2.flush();
+                out2.close();
             } catch (Exception e) {
+                System.out.println("here 6 ");
                 e.printStackTrace();
             }
 
             responseCode = client.getResponseCode();
         }  catch (Exception e) {
+            System.out.println("Here big");
             e.printStackTrace();
         }
         System.out.println("**--  Code: " + responseCode + "--**");
