@@ -39,6 +39,7 @@ public class ReviewActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ReviewActivity.this, GameActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -48,6 +49,7 @@ public class ReviewActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ReviewActivity.this, SettingsActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -57,6 +59,7 @@ public class ReviewActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ReviewActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }
