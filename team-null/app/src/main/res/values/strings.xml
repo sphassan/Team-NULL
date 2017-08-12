@@ -90,8 +90,6 @@
 
     <string name="button_skip">Skip</string>
 
-    <string name="review">Game completed!\n\nYou scored %1$d points and answered %2$d questions.\n%3$s</string>
-
     <string-array name="convo_array">
         <item>Boy</item>
         <item>Girl</item>
@@ -103,5 +101,9 @@
         <item>3 - Simple Real Images</item>
         <item>4 - Complex Real Images</item>
     </string-array>
+
+    <!-- Gameplay and Stats strings -->
+    <string name="review">Game completed!\n\nYou scored %1$d points and answered %2$d questions.\n%3$s</string>
+    <string name="score">Score: %1$d</string>
 
 </resources>

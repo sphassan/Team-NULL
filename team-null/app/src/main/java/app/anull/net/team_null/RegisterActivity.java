@@ -39,7 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
     private AutoCompleteTextView mLastNameView;
     private View mProgressView;
     private View mLoginFormView;
-    private boolean EXTRA_INITIAL_REGISTER;
+    //private boolean EXTRA_INITIAL_REGISTER;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

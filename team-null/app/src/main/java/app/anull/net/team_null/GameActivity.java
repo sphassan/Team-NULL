@@ -245,7 +245,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    // TODO: transfer to review activity instead of main menu
     private void endGame() {
         SharedPreferences pref = getApplicationContext().getSharedPreferences("Glance", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor;
@@ -368,7 +367,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         score.setVisibility(View.VISIBLE);
-        score.setText("Score: " + points); // TODO: switch to Android resource strings
+        String strPointsFormat = getResources().getString(R.string.score, points);
+        score.setText(strPointsFormat);
         score.setX(x/2 - 80);
         score.setY(200);
 
